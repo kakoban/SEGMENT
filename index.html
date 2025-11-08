@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>گزارش کارخانه تولید سگمنت - نسخه پیشرفته</title>
+    <title>گزارش کارخانه تولید سگمنت - نسخه حرفه‌ای</title>
     <style>
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #EBF4FF 0%, #E0E7FF 100%); min-height: 100vh; padding: 1rem;}
@@ -20,7 +20,7 @@
         .form-container {background: white; border-radius: 0 0 1rem 1rem; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
         .section {margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #E5E7EB;}
         .section:last-of-type {border-bottom: none;}
-        .section-title {font-size: 1.125rem; font-weight: bold; color: #1F2937; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;}
+        .section-title {font-size: 1.125rem; font-weight: bold; color: #1F2937; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; justify-content: space-between;}
         .grid {display: grid; gap: 1rem; grid-template-columns: 1fr;}
         @media (min-width: 768px) {.grid {grid-template-columns: repeat(2, 1fr);} .form-container {padding: 2.5rem;}}
         .form-group {display: flex; flex-direction: column;}
@@ -47,139 +47,118 @@
         .stock-item.low .stock-item-value {color: #DC2626;}
         .stock-item.warning {background: #FEF3C7; border-color: #FCD34D;}
         .stock-item.warning .stock-item-value {color: #D97706;}
-        .button-group {display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin-top: 2rem;}
+        .button-group {display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-top: 2rem;}
         button {padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
         button:hover:not(:disabled) {transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15);}
         button:disabled {opacity: 0.6; cursor: not-allowed; transform: none;}
+        .btn-primary {background: linear-gradient(to left, #6366F1 0%, #4F46E5 100%); color: white;}
         .btn-save {background: linear-gradient(to left, #10B981 0%, #059669 100%); color: white;}
-        .btn-load {background: linear-gradient(to left, #3B82F6 0%, #2563EB 100%); color: white;}
-        .btn-copy {background: linear-gradient(to left, #6366F1 0%, #4F46E5 100%); color: white;}
-        .btn-download {background: linear-gradient(to left, #059669 0%, #047857 100%); color: white;}
-        .btn-history {background: linear-gradient(to left, #F59E0B 0%, #D97706 100%); color: white;}
-        .btn-settings {background: linear-gradient(to left, #8B5CF6 0%, #7C3AED 100%); color: white;}
         .btn-danger {background: linear-gradient(to left, #EF4444 0%, #DC2626 100%); color: white;}
-        .preview {margin-top: 2rem; padding: 1rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 0.5rem;}
-        .preview h3 {font-size: 0.875rem; font-weight: bold; color: #374151; margin-bottom: 0.75rem;}
-        .preview pre {font-size: 0.75rem; color: #1F2937; white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', monospace; line-height: 1.6;}
-        .alert {position: fixed; top: 2rem; left: 50%; transform: translateX(-50%) translateY(-100px); background: #10B981; color: white; padding: 1rem 2rem; border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); opacity: 0; transition: all 0.3s; z-index: 1000; font-weight: bold;}
-        .alert.show {transform: translateX(-50%) translateY(0); opacity: 1;}
-        .alert.error {background: #EF4444;}
-        .alert.warning {background: #F59E0B;}
+        .btn-secondary {background: linear-gradient(to left, #8B5CF6 0%, #7C3AED 100%); color: white;}
+        .btn-sm {padding: 0.5rem 1rem; font-size: 0.8rem;}
         .modal {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1rem;}
         .modal.show {display: flex;}
-        .modal-content {background: white; border-radius: 1rem; padding: 2rem; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;}
+        .modal-content {background: white; border-radius: 1rem; padding: 2rem; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto;}
         .modal-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #E5E7EB;}
         .modal-header h2 {font-size: 1.25rem; color: #1F2937;}
         .modal-close {background: #EF4444; color: white; border: none; border-radius: 0.375rem; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.875rem; font-weight: bold;}
-        .settings-group {margin-bottom: 1.5rem;}
-        .settings-group h3 {font-size: 1rem; font-weight: bold; color: #374151; margin-bottom: 0.75rem;}
-        .settings-item {display: grid; grid-template-columns: 2fr 1fr; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;}
-        .settings-item label {margin: 0;}
-        .settings-item input {padding: 0.5rem;}
-        .history-list {max-height: 400px; overflow-y: auto;}
-        .history-item {background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 0.5rem; padding: 1rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s;}
-        .history-item:hover {border-color: #6366F1; background: #EEF2FF;}
-        .history-item.current {border-color: #10B981; background: #D1FAE5;}
-        .history-date {font-weight: bold; color: #1F2937; margin-bottom: 0.5rem;}
-        .history-info {font-size: 0.875rem; color: #6B7280; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;}
-        .calendar {display: none; position: absolute; top: 100%; left: 0; right: 0; margin-top: 0.5rem; background: white; border: 2px solid #6366F1; border-radius: 0.75rem; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 100; padding: 1rem;}
-        .calendar.show {display: block;}
-        .calendar-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid #E5E7EB;}
-        .calendar-header button {padding: 0.5rem 1rem; background: #6366F1; color: white; border: none; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; box-shadow: none; font-weight: bold;}
-        .calendar-header button:hover {background: #4F46E5; transform: none;}
-        .calendar-title {font-weight: bold; color: #1F2937; font-size: 1rem;}
-        .calendar-weekdays {display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem; margin-bottom: 0.5rem;}
-        .calendar-weekday {text-align: center; font-size: 0.75rem; font-weight: bold; color: #6B7280; padding: 0.5rem;}
-        .calendar-days {display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem;}
-        .calendar-day {aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 0.375rem; cursor: pointer; font-size: 0.875rem; transition: all 0.2s; border: 1px solid transparent;}
-        .calendar-day:hover {background: #EEF2FF; border-color: #6366F1;}
-        .calendar-day.selected {background: #6366F1; color: white; font-weight: bold;}
-        .calendar-day.today {border: 2px solid #10B981; font-weight: bold;}
-        .calendar-day.other-month {color: #D1D5DB;}
-        @media (max-width: 640px) {.calendar {position: fixed; top: 50%; left: 1rem; right: 1rem; margin-top: 0; transform: translateY(-50%);}}
+        .material-item {background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 0.5rem; padding: 1rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;}
+        .material-info {flex: 1;}
+        .material-name {font-weight: bold; color: #1F2937; margin-bottom: 0.25rem;}
+        .material-details {font-size: 0.875rem; color: #6B7280;}
+        .material-actions {display: flex; gap: 0.5rem;}
+        .alert {position: fixed; top: 2rem; left: 50%; transform: translateX(-50%) translateY(-100px); background: #10B981; color: white; padding: 1rem 2rem; border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); opacity: 0; transition: all 0.3s; z-index: 1000; font-weight: bold;}
+        .alert.show {transform: translateX(-50%) translateY(0); opacity: 1;}
+        .alert.error {background: #EF4444;}
+        .calendar {position: absolute; top: 100%; left: 0; right: 0; margin-top: 0.5rem; background: white; border: 2px solid #6366F1; border-radius: 1rem; box-shadow: 0 20px 60px rgba(0,0,0,0.25); z-index: 100; padding: 1.25rem; min-width: 320px;}
+        .calendar-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 2px solid #E5E7EB;}
+        .calendar-header button {width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #6366F1, #4F46E5); color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); font-weight: bold; display: flex; align-items: center; justify-content: center; transition: all 0.2s;}
+        .calendar-header button:hover {background: linear-gradient(135deg, #4F46E5, #4338CA); transform: scale(1.05); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);}
+        .calendar-title {font-weight: bold; color: #1F2937; font-size: 1.1rem; text-align: center;}
+        .calendar-weekdays {display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 0.75rem;}
+        .calendar-weekday {text-align: center; font-size: 0.8rem; font-weight: bold; color: #6B7280; padding: 0.5rem; background: #F9FAFB; border-radius: 0.375rem;}
+        .calendar-days {display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;}
+        .calendar-day {aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 0.5rem; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; border: 2px solid transparent; background: #F9FAFB; font-weight: 500;}
+        .calendar-day:hover {background: #EEF2FF; border-color: #6366F1; transform: scale(1.05);}
+        .calendar-day.selected {background: linear-gradient(135deg, #6366F1, #4F46E5); color: white; font-weight: bold; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);}
+        .calendar-day.today {border: 2px solid #10B981; background: #D1FAE5; font-weight: bold; color: #065F46;}
+        .calendar-day.other-month {color: #D1D5DB; background: transparent;}
     </style>
 </head>
 <body>
-    <div class="alert" id="alert">گزارش کپی شد! ✓</div>
-    
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
+    <div class="alert" id="alert">عملیات موفق ✓</div>
+
+    <!-- Materials Modal -->
+    <div class="modal" id="materialsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>⚙️ تنظیمات</h2>
-                <button class="modal-close" onclick="closeSettings()">بستن</button>
-            </div>
-            
-            <div class="settings-group">
-                <h3>📊 مصرف میلگرد (کیلوگرم در رینگ)</h3>
-                <div class="settings-item">
-                    <label>آرماتور شماره ۸</label>
-                    <input type="number" id="setting_rebar8" value="736">
-                </div>
-                <div class="settings-item">
-                    <label>آرماتور شماره ۱۲</label>
-                    <input type="number" id="setting_rebar12" value="758">
-                </div>
-                <div class="settings-item">
-                    <label>آرماتور شماره ۲۰</label>
-                    <input type="number" id="setting_rebar20" value="250">
-                </div>
+                <h2>📦 مدیریت مواد اولیه</h2>
+                <button class="modal-close" onclick="closeMaterialsModal()">بستن</button>
             </div>
 
-            <div class="settings-group">
-                <h3>🧪 مصرف افزودنی (کیلوگرم در رینگ)</h3>
-                <div class="settings-item">
-                    <label>افزودنی (فوق روان‌کننده)</label>
-                    <input type="number" id="setting_superplasticizer" value="45">
-                </div>
-            </div>
-
-            <div class="settings-group">
-                <h3>💾 تنظیمات پشتیبان‌گیری</h3>
-                <div class="settings-item">
-                    <label>حداکثر تاریخچه</label>
-                    <input type="number" id="setting_maxHistory" value="30" min="10" max="100">
-                </div>
-                <div class="form-group" style="margin-top: 1rem;">
-                    <label>پشتیبان خودکار قبل از ذخیره</label>
-                    <select id="setting_autoBackup">
-                        <option value="true">فعال</option>
-                        <option value="false">غیرفعال</option>
-                    </select>
-                </div>
-            </div>
-
-            <button class="btn-copy" onclick="saveSettings()" style="width: 100%; margin-top: 1rem;">
-                ✓ ذخیره تنظیمات
+            <button class="btn-primary btn-sm" onclick="showAddMaterialForm()" style="margin-bottom: 1rem; width: 100%;">
+                ➕ افزودن ماده جدید
             </button>
+
+            <div id="addMaterialForm" style="display: none; background: #F0F9FF; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                <h3 style="font-size: 1rem; margin-bottom: 0.75rem;">ماده جدید</h3>
+                <div class="grid">
+                    <div class="form-group">
+                        <label>نام ماده</label>
+                        <input type="text" id="newMaterialName" placeholder="مثلاً: سیمان پرتلند">
+                    </div>
+                    <div class="form-group">
+                        <label>واحد</label>
+                        <input type="text" id="newMaterialUnit" placeholder="کیلوگرم / لیتر / تن">
+                    </div>
+                    <div class="form-group">
+                        <label>موجودی مبنا</label>
+                        <input type="number" id="newMaterialInitial" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>مصرف در رینگ</label>
+                        <input type="number" id="newMaterialConsumption" placeholder="0">
+                    </div>
+                </div>
+                <div class="button-group" style="margin-top: 0.75rem;">
+                    <button class="btn-save" onclick="addMaterial()">✓ ذخیره</button>
+                    <button class="btn-danger" onclick="hideAddMaterialForm()">✕ لغو</button>
+                </div>
+            </div>
+
+            <div id="materialsList"></div>
         </div>
     </div>
 
-    <!-- History Modal -->
-    <div class="modal" id="historyModal">
+    <!-- Edit Material Modal -->
+    <div class="modal" id="editMaterialModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>📜 تاریخچه گزارش‌ها</h2>
-                <button class="modal-close" onclick="closeHistory()">بستن</button>
+                <h2>✏️ ویرایش ماده</h2>
+                <button class="modal-close" onclick="closeEditMaterialModal()">بستن</button>
             </div>
-            
-            <div class="info-box warning">
-                <h3>⚠️ توجه</h3>
-                <p style="font-size: 0.875rem; color: #92400E;">با کلیک روی هر گزارش، اطلاعات آن بازیابی می‌شود. گزارش فعلی قبل از بازیابی در تاریخچه ذخیره می‌شود.</p>
+            <input type="hidden" id="editMaterialKey">
+            <div class="grid">
+                <div class="form-group">
+                    <label>نام ماده</label>
+                    <input type="text" id="editMaterialName">
+                </div>
+                <div class="form-group">
+                    <label>واحد</label>
+                    <input type="text" id="editMaterialUnit">
+                </div>
+                <div class="form-group">
+                    <label>موجودی مبنا</label>
+                    <input type="number" id="editMaterialInitial">
+                </div>
+                <div class="form-group">
+                    <label>مصرف در رینگ</label>
+                    <input type="number" id="editMaterialConsumption">
+                </div>
             </div>
-            
-            <div class="history-list" id="historyList">
-                <p style="text-align: center; color: #6B7280; padding: 2rem;">هیچ گزارش قبلی وجود ندارد</p>
-            </div>
-            
-            <div class="button-group" style="margin-top: 1rem;">
-                <button class="btn-danger" onclick="clearHistory()">
-                    🗑️ پاک کردن تاریخچه
-                </button>
-                <button class="btn-download" onclick="exportHistory()">
-                    📥 صادرات تاریخچه
-                </button>
-            </div>
+            <button class="btn-save" onclick="saveEditMaterial()" style="width: 100%; margin-top: 1rem;">
+                ✓ ذخیره تغییرات
+            </button>
         </div>
     </div>
 
@@ -187,53 +166,37 @@
         <div class="header">
             <div class="header-content">
                 <div class="header-title">
-                    <svg class="icon" viewBox="0 0 24 24">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14 2 14 8 20 8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                    </svg>
                     <div>
                         <h1>گزارش کارخانه تولید سگمنت</h1>
-                        <p>🔴 پروژه خط ۱۰ مترو تهران - نسخه پیشرفته</p>
+                        <p>🔴 پروژه خط ۱۰ مترو تهران - نسخه حرفه‌ای</p>
                     </div>
                 </div>
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                    <div class="badge" onclick="setToday()" id="todayBadge">📅 امروز</div>
-                    <div class="badge success" id="backupBadge">💾 پشتیبان فعال</div>
-                </div>
+                <div class="badge success">💾 پشتیبان فعال</div>
             </div>
         </div>
 
         <div class="form-container">
-            <!-- Warning Box -->
-            <div class="info-box warning" id="warningBox" style="display: none;">
-                <h3>⚠️ هشدار: تغییرات ذخیره نشده</h3>
-                <p style="font-size: 0.875rem; color: #92400E;">تغییرات شما هنوز ذخیره نشده است. قبل از بستن صفحه حتماً ذخیره کنید.</p>
-            </div>
-
-            <!-- Success Box -->
-            <div class="info-box success" id="successBox" style="display: none;">
+            <div class="info-box success">
                 <h3>✓ آخرین ذخیره</h3>
                 <p style="font-size: 0.875rem; color: #065F46;" id="lastSaveInfo">هنوز ذخیره نشده</p>
             </div>
 
-            <!-- تاریخ گزارش -->
+            <!-- تاریخ -->
             <div class="section">
                 <h2 class="section-title">
-                    📅 تاریخ گزارش
+                    <span>📅 تاریخ گزارش</span>
                 </h2>
                 <div class="grid">
                     <div class="form-group">
                         <label>تاریخ (کلیک کنید)</label>
                         <div style="position: relative;">
-                            <input type="text" id="reportDate" value="" readonly style="cursor: pointer; background: white;">
-                            <div id="calendar" class="calendar"></div>
+                            <input type="text" id="reportDate" value="1404/08/18" readonly style="cursor: pointer; background: white;">
+                            <div id="calendar" class="calendar" style="display: none;"></div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>روز</label>
-                        <input type="text" id="dayName" value="" readonly style="background: #F3F4F6;">
+                        <input type="text" id="dayName" value="شنبه" readonly style="background: #F3F4F6;">
                     </div>
                 </div>
             </div>
@@ -241,408 +204,167 @@
             <!-- اطلاعات تولید -->
             <div class="section">
                 <h2 class="section-title">
-                    📊 اطلاعات تولید
+                    <span>📊 اطلاعات تولید</span>
                 </h2>
-
-                <div class="info-box">
-                    <h3>📌 مصرف مواد اولیه در هر رینگ</h3>
-                    <table class="info-table">
-                        <tr><td>آرماتور شماره ۸</td><td><span id="display_rebar8">۷۳۶</span> کیلوگرم</td></tr>
-                        <tr><td>آرماتور شماره ۱۲</td><td><span id="display_rebar12">۷۵۸</span> کیلوگرم</td></tr>
-                        <tr><td>آرماتور شماره ۲۰</td><td><span id="display_rebar20">۲۵۰</span> کیلوگرم</td></tr>
-                        <tr><td>افزودنی (فوق روان‌کننده)</td><td><span id="display_superplasticizer">۴۵</span> کیلوگرم</td></tr>
-                    </table>
-                </div>
-
                 <div class="grid">
                     <div class="form-group">
                         <label>تولید روز (رینگ)</label>
-                        <input type="number" id="ringsProduced" value="0" placeholder="0">
+                        <input type="number" id="ringsProduced" value="0">
                     </div>
                     <div class="form-group">
-                        <label>سبد ساخته شده (به رینگ)</label>
-                        <input type="number" id="basketsProduced" placeholder="—">
+                        <label>سبد ساخته شده</label>
+                        <input type="number" id="basketsProduced" value="0">
                     </div>
                     <div class="form-group">
                         <label>تولید ماه (رینگ)</label>
-                        <input type="number" id="monthlyProduction" value="0" placeholder="0">
+                        <input type="number" id="monthlyProduction" value="0">
                     </div>
                     <div class="form-group">
-                        <label>تولید سال ۱۴۰۴ (رینگ)</label>
-                        <input type="number" id="yearlyProduction" value="0" placeholder="0">
+                        <label>تولید سال ۱۴۰۴</label>
+                        <input type="number" id="yearlyProduction" value="0">
                     </div>
                     <div class="form-group" style="grid-column: 1 / -1;">
-                        <label>تولید تجمعی کل (رینگ)</label>
-                        <input type="number" id="totalProduction" value="0" placeholder="0">
+                        <label>تولید تجمعی کل</label>
+                        <input type="number" id="totalProduction" value="0">
                     </div>
                 </div>
             </div>
 
-            <!-- موجودی مواد اولیه -->
+            <!-- موجودی مواد -->
             <div class="section">
                 <h2 class="section-title">
-                    📦 موجودی مواد اولیه
+                    <span>📦 موجودی مواد اولیه</span>
+                    <button class="btn-secondary btn-sm" onclick="openMaterialsModal()">
+                        ⚙️ مدیریت مواد
+                    </button>
                 </h2>
-                <div class="grid">
-                    <div class="form-group">
-                        <label>میلگرد شماره ۸ (کیلوگرم)</label>
-                        <input type="number" id="rebar8Stock" value="0" placeholder="0">
-                    </div>
-                    <div class="form-group">
-                        <label>میلگرد شماره ۱۲ (کیلوگرم)</label>
-                        <input type="number" id="rebar12Stock" value="0" placeholder="0">
-                    </div>
-                    <div class="form-group">
-                        <label>میلگرد شماره ۲۰ (کیلوگرم)</label>
-                        <input type="number" id="rebar20Stock" value="0" placeholder="0">
-                    </div>
-                    <div class="form-group">
-                        <label>فوق روان‌کننده (کیلوگرم)</label>
-                        <input type="number" id="superplasticizerStock" value="0" placeholder="0">
-                    </div>
-                    <div class="form-group">
-                        <label>میکرو سیلیس (کیلوگرم)</label>
-                        <input type="number" id="microsilicaStock" value="0" placeholder="0">
-                    </div>
+
+                <div id="materialRatesDisplay" class="info-box">
+                    <h3>📌 مصرف مواد در هر رینگ</h3>
+                    <table class="info-table" id="ratesTable"></table>
                 </div>
 
-                <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; font-size: 1rem; color: #1F2937;">💡 محاسبه ظرفیت و باقی‌مانده</h3>
+                <div class="grid" id="stockInputs"></div>
+
+                <h3 style="margin-top: 1.5rem; margin-bottom: 0.75rem; font-size: 1rem; color: #1F2937;">💡 محاسبه ظرفیت</h3>
                 <div class="stock-display" id="stockDisplay"></div>
             </div>
 
-            <!-- مشکلات و موانع -->
+            <!-- مشکلات -->
             <div class="section">
-                <h2 class="section-title">
-                    ⚠️ مشکلات و موانع
-                </h2>
-                <div class="form-group">
-                    <textarea id="issues" placeholder="مشکلات و موانع را وارد کنید..."></textarea>
-                </div>
+                <h2 class="section-title">⚠️ مشکلات و موانع</h2>
+                <textarea id="issues" placeholder="مشکلات را وارد کنید..."></textarea>
             </div>
 
             <!-- پیشنهادات -->
             <div class="section">
-                <h2 class="section-title">
-                    💡 پیشنهادات
-                </h2>
-                <div class="form-group">
-                    <textarea id="suggestions" placeholder="پیشنهادات را وارد کنید..."></textarea>
-                </div>
+                <h2 class="section-title">💡 پیشنهادات</h2>
+                <textarea id="suggestions" placeholder="پیشنهادات را وارد کنید..."></textarea>
             </div>
 
             <!-- دکمه‌ها -->
             <div class="button-group">
-                <button class="btn-settings" onclick="openSettings()">
-                    ⚙️ تنظیمات
-                </button>
-                <button class="btn-history" onclick="openHistory()">
-                    📜 تاریخچه
-                </button>
-                <button class="btn-save" onclick="saveWithBackup()" id="saveBtn">
-                    💾 ذخیره امن
-                </button>
-                <button class="btn-copy" onclick="copyReport()">
-                    📋 کپی
-                </button>
-                <button class="btn-download" onclick="downloadReport()">
-                    📥 دانلود
-                </button>
-            </div>
-
-            <!-- پیش‌نمایش -->
-            <div class="preview">
-                <h3>پیش‌نمایش گزارش:</h3>
-                <pre id="preview"></pre>
+                <button class="btn-save" onclick="saveData()">💾 ذخیره</button>
+                <button class="btn-primary" onclick="exportJSON()">📥 صادرات JSON</button>
+                <button class="btn-primary" onclick="copyReport()">📋 کپی گزارش</button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.2.6/dist/jalaali.min.js"></script>
     <script>
-        // Configuration
-        let config = {
-            maxHistory: 30,
-            autoBackup: true
-        };
-        
-        let materialRates = {
-            rebar8: 736,
-            rebar12: 758,
-            rebar20: 250,
-            superplasticizer: 45
+        let materials = {
+            rebar8: {name: 'میلگرد ۸', unit: 'کیلوگرم', initialStock: 0, ringConsumption: 736},
+            rebar12: {name: 'میلگرد ۱۲', unit: 'کیلوگرم', initialStock: 0, ringConsumption: 758},
+            rebar20: {name: 'میلگرد ۲۰', unit: 'کیلوگرم', initialStock: 0, ringConsumption: 250},
+            superplasticizer: {name: 'فوق روان‌کننده', unit: 'کیلوگرم', initialStock: 0, ringConsumption: 45}
         };
 
-        let reportHistory = [];
-        let hasUnsavedChanges = false;
+        let materialStocks = {};
 
         const persianMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
         const persianDays = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];
-
         let currentJalaliDate, selectedJalaliDate, calendarDisplayMonth, calendarDisplayYear;
-
-        // Jalali Date Functions using jalaali-js library
-        function toJalali(gy, gm, gd) {
-            return jalaali.toJalaali(gy, gm, gd);
-        }
-
-        function toGregorian(jy, jm, jd) {
-            return jalaali.toGregorian(jy, jm, jd);
-        }
 
         function toPersianNumber(num) {
             const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-            return num.toString().replace(/\d/g, x => persianDigits[x]);
+            return String(num).replace(/\d/g, x => persianDigits[x]);
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
+        function toJalali(gy, gm, gd) {
+            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            let jy = (gy <= 1600) ? 0 : 979;
+            gy -= (gy <= 1600) ? 621 : 1600;
+            let gy2 = (gm > 2) ? (gy + 1) : gy;
+            let days = (365 * gy) + (Math.floor((gy2 + 3) / 4)) - (Math.floor((gy2 + 99) / 100)) + (Math.floor((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
+            jy += 33 * Math.floor(days / 12053);
+            days %= 12053;
+            jy += 4 * Math.floor(days / 1461);
+            days %= 1461;
+            if (days > 365) {
+                jy += Math.floor((days - 1) / 365);
+                days = (days - 1) % 365;
+            }
+            let jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+            let jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+            return {year: jy, month: jm, day: jd};
+        }
+
+        function toGregorian(jy, jm, jd) {
+            let gy = (jy <= 979) ? 621 : 1600;
+            jy -= (jy <= 979) ? 0 : 979;
+            let days = (365 * jy) + (Math.floor(jy / 33) * 8) + Math.floor(((jy % 33) + 3) / 4) + 78 + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+            gy += 400 * Math.floor(days / 146097);
+            days %= 146097;
+            let leap = true;
+            if (days >= 36525) {
+                days--;
+                gy += 100 * Math.floor(days / 36524);
+                days %= 36524;
+                if (days >= 365) days++;
+                else leap = false;
+            }
+            gy += 4 * Math.floor(days / 1461);
+            days %= 1461;
+            if (days >= 366) {
+                leap = false;
+                days--;
+                gy += Math.floor(days / 365);
+                days %= 365;
+            }
+            let gd = days + 1;
+            let sal_a = [0, 31, ((leap && gy >= 1600) || (!leap && gy < 1600)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let gm = 0;
+            for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) gd -= sal_a[gm];
+            return {gy: gy, gm: gm, gd: gd};
+        }
+
+        function initCalendar() {
             const now = new Date();
             currentJalaliDate = toJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
-            selectedJalaliDate = { ...currentJalaliDate };
+            selectedJalaliDate = {...currentJalaliDate};
             calendarDisplayMonth = currentJalaliDate.month;
             calendarDisplayYear = currentJalaliDate.year;
-            
             updateDateDisplay();
-            updatePreview();
-            loadSettings();
-            loadHistory();
             
             document.getElementById('reportDate').addEventListener('click', toggleCalendar);
-            document.querySelectorAll('input, textarea').forEach(el => {
-                el.addEventListener('input', () => {
-                    markAsUnsaved();
-                    updatePreview();
-                });
-            });
-            
-            renderCalendar();
-            loadFromLocalStorage();
-            
-            // Warn before closing if unsaved
-            window.addEventListener('beforeunload', (e) => {
-                if (hasUnsavedChanges) {
-                    e.preventDefault();
-                    e.returnValue = '';
-                }
-            });
-        });
-
-        function markAsUnsaved() {
-            hasUnsavedChanges = true;
-            document.getElementById('warningBox').style.display = 'block';
-            document.getElementById('successBox').style.display = 'none';
-        }
-
-        function markAsSaved() {
-            hasUnsavedChanges = false;
-            document.getElementById('warningBox').style.display = 'none';
-            document.getElementById('successBox').style.display = 'block';
-            const now = new Date();
-            document.getElementById('lastSaveInfo').textContent = 
-                'ذخیره شد در ' + now.toLocaleTimeString('fa-IR');
-        }
-
-        // Backup and Save Functions
-        function saveWithBackup() {
-            if (config.autoBackup) {
-                createBackup();
-            }
-            saveToLocalStorage();
-            markAsSaved();
-            showAlert('✓ گزارش با موفقیت ذخیره شد', 'success');
-        }
-
-        function createBackup() {
-            const backup = {
-                timestamp: new Date().toISOString(),
-                date: document.getElementById('reportDate').value,
-                dayName: document.getElementById('dayName').value,
-                ringsProduced: document.getElementById('ringsProduced').value,
-                basketsProduced: document.getElementById('basketsProduced').value,
-                monthlyProduction: document.getElementById('monthlyProduction').value,
-                yearlyProduction: document.getElementById('yearlyProduction').value,
-                totalProduction: document.getElementById('totalProduction').value,
-                stock: {
-                    rebar8: document.getElementById('rebar8Stock').value,
-                    rebar12: document.getElementById('rebar12Stock').value,
-                    rebar20: document.getElementById('rebar20Stock').value,
-                    superplasticizer: document.getElementById('superplasticizerStock').value,
-                    microsilica: document.getElementById('microsilicaStock').value
-                },
-                issues: document.getElementById('issues').value,
-                suggestions: document.getElementById('suggestions').value
-            };
-            
-            reportHistory.unshift(backup);
-            
-            // Keep only max history items
-            if (reportHistory.length > config.maxHistory) {
-                reportHistory = reportHistory.slice(0, config.maxHistory);
-            }
-            
-            localStorage.setItem('reportHistory', JSON.stringify(reportHistory));
-        }
-
-        function loadHistory() {
-            const saved = localStorage.getItem('reportHistory');
-            if (saved) {
-                reportHistory = JSON.parse(saved);
-            }
-        }
-
-        function openHistory() {
-            renderHistoryList();
-            document.getElementById('historyModal').classList.add('show');
-        }
-
-        function closeHistory() {
-            document.getElementById('historyModal').classList.remove('show');
-        }
-
-        function renderHistoryList() {
-            const list = document.getElementById('historyList');
-            
-            if (reportHistory.length === 0) {
-                list.innerHTML = '<p style="text-align: center; color: #6B7280; padding: 2rem;">هیچ گزارش قبلی وجود ندارد</p>';
-                return;
-            }
-            
-            let html = '';
-            reportHistory.forEach((item, index) => {
-                const timestamp = new Date(item.timestamp);
-                const isRecent = index === 0;
-                
-                html += '<div class="history-item' + (isRecent ? ' current' : '') + '" onclick="restoreFromHistory(' + index + ')">';
-                html += '<div class="history-date">' + (item.date || 'بدون تاریخ') + ' - ' + (item.dayName || '') + '</div>';
-                html += '<div class="history-info">';
-                html += '<span>تولید: ' + toPersianNumber(item.ringsProduced || '0') + ' رینگ</span>';
-                html += '<span>تجمعی: ' + toPersianNumber(item.totalProduction || '0') + ' رینگ</span>';
-                html += '<span>' + timestamp.toLocaleDateString('fa-IR') + ' ' + timestamp.toLocaleTimeString('fa-IR') + '</span>';
-                html += '</div>';
-                html += '</div>';
-            });
-            
-            list.innerHTML = html;
-        }
-
-        function restoreFromHistory(index) {
-            if (!confirm('آیا مطمئن هستید؟ گزارش فعلی در تاریخچه ذخیره می‌شود.')) {
-                return;
-            }
-            
-            // Save current before restoring
-            createBackup();
-            
-            const item = reportHistory[index];
-            
-            // Restore data
-            if (item.date) {
-                const parts = item.date.split('/');
-                if (parts.length === 3) {
-                    selectedJalaliDate = {
-                        year: parseInt(parts[0]),
-                        month: parseInt(parts[1]),
-                        day: parseInt(parts[2])
-                    };
-                    updateDateDisplay();
-                }
-            }
-            
-            document.getElementById('ringsProduced').value = item.ringsProduced || '0';
-            document.getElementById('basketsProduced').value = item.basketsProduced || '';
-            document.getElementById('monthlyProduction').value = item.monthlyProduction || '0';
-            document.getElementById('yearlyProduction').value = item.yearlyProduction || '0';
-            document.getElementById('totalProduction').value = item.totalProduction || '0';
-            
-            if (item.stock) {
-                document.getElementById('rebar8Stock').value = item.stock.rebar8 || '0';
-                document.getElementById('rebar12Stock').value = item.stock.rebar12 || '0';
-                document.getElementById('rebar20Stock').value = item.stock.rebar20 || '0';
-                document.getElementById('superplasticizerStock').value = item.stock.superplasticizer || '0';
-                document.getElementById('microsilicaStock').value = item.stock.microsilica || '0';
-            }
-            
-            document.getElementById('issues').value = item.issues || '';
-            document.getElementById('suggestions').value = item.suggestions || '';
-            
-            updatePreview();
-            closeHistory();
-            showAlert('✓ گزارش بازیابی شد', 'success');
-        }
-
-        function clearHistory() {
-            if (!confirm('آیا مطمئن هستید که می‌خواهید تمام تاریخچه را پاک کنید؟')) {
-                return;
-            }
-            
-            reportHistory = [];
-            localStorage.removeItem('reportHistory');
-            renderHistoryList();
-            showAlert('✓ تاریخچه پاک شد', 'success');
-        }
-
-        function exportHistory() {
-            const data = {
-                exportDate: new Date().toISOString(),
-                history: reportHistory,
-                config: config,
-                materialRates: materialRates
-            };
-            
-            const jsonStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'تاریخچه-گزارشات-' + new Date().toISOString().split('T')[0] + '.json';
-            link.click();
-            showAlert('✓ تاریخچه صادر شد', 'success');
-        }
-
-        function setToday() {
-            const now = new Date();
-            currentJalaliDate = toJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
-            selectedJalaliDate = { ...currentJalaliDate };
-            calendarDisplayMonth = currentJalaliDate.month;
-            calendarDisplayYear = currentJalaliDate.year;
-            updateDateDisplay();
-            renderCalendar();
-        }
-
-        // Calendar Functions
-        function updateDateDisplay() {
-            const jalali = selectedJalaliDate;
-            const gregorian = toGregorian(jalali.year, jalali.month, jalali.day);
-            const date = new Date(gregorian.gy, gregorian.gm - 1, gregorian.gd);
-            const dayOfWeek = date.getDay();
-            
-            document.getElementById('reportDate').value = 
-                toPersianNumber(jalali.year) + '/' + 
-                toPersianNumber(jalali.month.toString().padStart(2, '0')) + '/' + 
-                toPersianNumber(jalali.day.toString().padStart(2, '0'));
-            
-            document.getElementById('dayName').value = persianDays[dayOfWeek];
-            
-            const isToday = jalali.year === currentJalaliDate.year && 
-                           jalali.month === currentJalaliDate.month && 
-                           jalali.day === currentJalaliDate.day;
-            const badge = document.getElementById('todayBadge');
-            badge.textContent = isToday ? '✓ امروز' : '📅 امروز';
-            
-            updatePreview();
         }
 
         function toggleCalendar() {
             const calendar = document.getElementById('calendar');
-            calendar.classList.toggle('show');
-            if (calendar.classList.contains('show')) renderCalendar();
+            if (calendar.style.display === 'none') {
+                calendar.style.display = 'block';
+                renderCalendar();
+            } else {
+                calendar.style.display = 'none';
+            }
         }
 
         function renderCalendar() {
             const calendar = document.getElementById('calendar');
             let html = '<div class="calendar-header">';
-            html += '<button onclick="previousMonth()">◀</button>';
+            html += '<button onclick="previousMonth(event)" title="ماه قبل">◀</button>';
             html += '<div class="calendar-title">' + persianMonths[calendarDisplayMonth - 1] + ' ' + toPersianNumber(calendarDisplayYear) + '</div>';
-            html += '<button onclick="nextMonth()">▶</button></div>';
+            html += '<button onclick="nextMonth(event)" title="ماه بعد">▶</button></div>';
             
             html += '<div class="calendar-weekdays">';
             ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'].forEach(day => {
@@ -680,13 +402,13 @@
         }
 
         function selectDate(day) {
-            selectedJalaliDate = { year: calendarDisplayYear, month: calendarDisplayMonth, day: day };
+            selectedJalaliDate = {year: calendarDisplayYear, month: calendarDisplayMonth, day: day};
             updateDateDisplay();
             toggleCalendar();
-            markAsUnsaved();
         }
 
-        function previousMonth() {
+        function previousMonth(event) {
+            event.stopPropagation();
             calendarDisplayMonth--;
             if (calendarDisplayMonth < 1) {
                 calendarDisplayMonth = 12;
@@ -695,7 +417,8 @@
             renderCalendar();
         }
 
-        function nextMonth() {
+        function nextMonth(event) {
+            event.stopPropagation();
             calendarDisplayMonth++;
             if (calendarDisplayMonth > 12) {
                 calendarDisplayMonth = 1;
@@ -704,278 +427,333 @@
             renderCalendar();
         }
 
-        // Stock Calculation
-        function calculateStockDetails() {
-            const ringsProduced = parseFloat(document.getElementById('ringsProduced').value) || 0;
+        function updateDateDisplay() {
+            const jalali = selectedJalaliDate;
+            const gregorian = toGregorian(jalali.year, jalali.month, jalali.day);
+            const date = new Date(gregorian.gy, gregorian.gm - 1, gregorian.gd);
+            const dayOfWeek = date.getDay();
             
-            const rebar8Stock = parseFloat(document.getElementById('rebar8Stock').value) || 0;
-            const rebar12Stock = parseFloat(document.getElementById('rebar12Stock').value) || 0;
-            const rebar20Stock = parseFloat(document.getElementById('rebar20Stock').value) || 0;
-            const superplasticizerStock = parseFloat(document.getElementById('superplasticizerStock').value) || 0;
+            document.getElementById('reportDate').value = 
+                toPersianNumber(jalali.year) + '/' + 
+                toPersianNumber(String(jalali.month).padStart(2, '0')) + '/' + 
+                toPersianNumber(String(jalali.day).padStart(2, '0'));
             
-            const rebar8Used = ringsProduced * materialRates.rebar8;
-            const rebar12Used = ringsProduced * materialRates.rebar12;
-            const rebar20Used = ringsProduced * materialRates.rebar20;
-            const superplasticizerUsed = ringsProduced * materialRates.superplasticizer;
-            
-            const rebar8Remaining = Math.max(0, rebar8Stock - rebar8Used);
-            const rebar12Remaining = Math.max(0, rebar12Stock - rebar12Used);
-            const rebar20Remaining = Math.max(0, rebar20Stock - rebar20Used);
-            const superplasticizerRemaining = Math.max(0, superplasticizerStock - superplasticizerUsed);
-            
-            const rebar8Capacity = Math.floor(rebar8Remaining / materialRates.rebar8);
-            const rebar12Capacity = Math.floor(rebar12Remaining / materialRates.rebar12);
-            const rebar20Capacity = Math.floor(rebar20Remaining / materialRates.rebar20);
-            const superplasticizerCapacity = Math.floor(superplasticizerRemaining / materialRates.superplasticizer);
-            
-            return {
-                rebar8: { used: rebar8Used, remaining: rebar8Remaining, capacity: rebar8Capacity },
-                rebar12: { used: rebar12Used, remaining: rebar12Remaining, capacity: rebar12Capacity },
-                rebar20: { used: rebar20Used, remaining: rebar20Remaining, capacity: rebar20Capacity },
-                superplasticizer: { used: superplasticizerUsed, remaining: superplasticizerRemaining, capacity: superplasticizerCapacity }
-            };
+            document.getElementById('dayName').value = persianDays[dayOfWeek];
         }
 
-        function updateStockDisplay() {
-            const details = calculateStockDetails();
-            const stockDisplay = document.getElementById('stockDisplay');
+        function init() {
+            initCalendar();
+            loadData();
+            renderMaterialInputs();
+            renderMaterialRates();
+            calculateCapacity();
             
-            const items = [
-                { title: 'میلگرد ۸', data: details.rebar8, threshold: 10 },
-                { title: 'میلگرد ۱۲', data: details.rebar12, threshold: 10 },
-                { title: 'میلگرد ۲۰', data: details.rebar20, threshold: 10 },
-                { title: 'فوق روان‌کننده', data: details.superplasticizer, threshold: 15 }
-            ];
+            document.querySelectorAll('input, textarea').forEach(el => {
+                el.addEventListener('input', () => {
+                    calculateCapacity();
+                });
+            });
+        }
+
+        function renderMaterialRates() {
+            const table = document.getElementById('ratesTable');
+            let html = '';
+            Object.entries(materials).forEach(([key, mat]) => {
+                html += '<tr>';
+                html += '<td>' + mat.name + '</td>';
+                html += '<td>' + toPersianNumber(mat.ringConsumption) + ' ' + mat.unit + '</td>';
+                html += '</tr>';
+            });
+            table.innerHTML = html;
+        }
+
+        function renderMaterialInputs() {
+            const container = document.getElementById('stockInputs');
+            let html = '';
+            Object.entries(materials).forEach(([key, mat]) => {
+                html += '<div class="form-group">';
+                html += '<label>' + mat.name + ' (' + mat.unit + ')</label>';
+                html += '<input type="number" id="stock_' + key + '" value="' + (materialStocks[key] || 0) + '" placeholder="0">';
+                html += '</div>';
+            });
+            container.innerHTML = html;
+            
+            // Add event listeners
+            Object.keys(materials).forEach(key => {
+                const input = document.getElementById('stock_' + key);
+                if (input) {
+                    input.addEventListener('input', () => {
+                        materialStocks[key] = parseFloat(input.value) || 0;
+                        calculateCapacity();
+                    });
+                }
+            });
+        }
+
+        function calculateCapacity() {
+            const ringsProduced = parseFloat(document.getElementById('ringsProduced').value) || 0;
+            const display = document.getElementById('stockDisplay');
             
             let html = '';
-            items.forEach(item => {
-                const status = item.data.capacity < 5 ? 'low' : item.data.capacity < item.threshold ? 'warning' : '';
+            Object.entries(materials).forEach(([key, mat]) => {
+                const stock = materialStocks[key] || 0;
+                const used = ringsProduced * mat.ringConsumption;
+                const remaining = Math.max(0, stock - used);
+                const capacity = Math.floor(remaining / mat.ringConsumption);
+                
+                const status = capacity < 5 ? 'low' : capacity < 10 ? 'warning' : '';
                 
                 html += '<div class="stock-item ' + status + '">';
-                html += '<div class="stock-item-title">' + item.title + '</div>';
-                html += '<div class="stock-item-value">' + toPersianNumber(item.data.capacity) + ' رینگ</div>';
-                html += '<div class="stock-item-detail">مصرف: ' + toPersianNumber(Math.round(item.data.used)) + ' کیلوگرم</div>';
-                html += '<div class="stock-item-detail">باقی‌مانده: ' + toPersianNumber(Math.round(item.data.remaining)) + ' کیلوگرم</div>';
+                html += '<div class="stock-item-title">' + mat.name + '</div>';
+                html += '<div class="stock-item-value">' + toPersianNumber(capacity) + ' رینگ</div>';
+                html += '<div class="stock-item-detail">مصرف: ' + toPersianNumber(Math.round(used)) + ' ' + mat.unit + '</div>';
+                html += '<div class="stock-item-detail">باقی‌مانده: ' + toPersianNumber(Math.round(remaining)) + ' ' + mat.unit + '</div>';
                 html += '</div>';
             });
             
-            stockDisplay.innerHTML = html;
+            display.innerHTML = html;
         }
 
-        // Report Generation
-        function generateReport() {
+        function openMaterialsModal() {
+            renderMaterialsList();
+            document.getElementById('materialsModal').classList.add('show');
+        }
+
+        function closeMaterialsModal() {
+            document.getElementById('materialsModal').classList.remove('show');
+            hideAddMaterialForm();
+        }
+
+        function showAddMaterialForm() {
+            document.getElementById('addMaterialForm').style.display = 'block';
+        }
+
+        function hideAddMaterialForm() {
+            document.getElementById('addMaterialForm').style.display = 'none';
+            document.getElementById('newMaterialName').value = '';
+            document.getElementById('newMaterialUnit').value = '';
+            document.getElementById('newMaterialInitial').value = '';
+            document.getElementById('newMaterialConsumption').value = '';
+        }
+
+        function addMaterial() {
+            const name = document.getElementById('newMaterialName').value.trim();
+            const unit = document.getElementById('newMaterialUnit').value.trim();
+            const initial = parseFloat(document.getElementById('newMaterialInitial').value) || 0;
+            const consumption = parseFloat(document.getElementById('newMaterialConsumption').value) || 0;
+            
+            if (!name || !unit) {
+                showAlert('لطفاً نام و واحد را وارد کنید', 'error');
+                return;
+            }
+            
+            const key = 'mat_' + Date.now();
+            materials[key] = {
+                name: name,
+                unit: unit,
+                initialStock: initial,
+                ringConsumption: consumption
+            };
+            
+            materialStocks[key] = initial;
+            
+            hideAddMaterialForm();
+            renderMaterialsList();
+            renderMaterialInputs();
+            renderMaterialRates();
+            calculateCapacity();
+            showAlert('ماده جدید اضافه شد', 'success');
+        }
+
+        function renderMaterialsList() {
+            const container = document.getElementById('materialsList');
+            let html = '';
+            
+            Object.entries(materials).forEach(([key, mat]) => {
+                html += '<div class="material-item">';
+                html += '<div class="material-info">';
+                html += '<div class="material-name">' + mat.name + '</div>';
+                html += '<div class="material-details">';
+                html += 'واحد: ' + mat.unit + ' | ';
+                html += 'موجودی مبنا: ' + toPersianNumber(mat.initialStock) + ' | ';
+                html += 'مصرف: ' + toPersianNumber(mat.ringConsumption) + ' در رینگ';
+                html += '</div>';
+                html += '</div>';
+                html += '<div class="material-actions">';
+                html += '<button class="btn-primary btn-sm" onclick="editMaterial(\'' + key + '\')">✏️</button>';
+                html += '<button class="btn-danger btn-sm" onclick="deleteMaterial(\'' + key + '\')">🗑️</button>';
+                html += '</div>';
+                html += '</div>';
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function editMaterial(key) {
+            const mat = materials[key];
+            document.getElementById('editMaterialKey').value = key;
+            document.getElementById('editMaterialName').value = mat.name;
+            document.getElementById('editMaterialUnit').value = mat.unit;
+            document.getElementById('editMaterialInitial').value = mat.initialStock;
+            document.getElementById('editMaterialConsumption').value = mat.ringConsumption;
+            document.getElementById('editMaterialModal').classList.add('show');
+        }
+
+        function closeEditMaterialModal() {
+            document.getElementById('editMaterialModal').classList.remove('show');
+        }
+
+        function saveEditMaterial() {
+            const key = document.getElementById('editMaterialKey').value;
+            const name = document.getElementById('editMaterialName').value.trim();
+            const unit = document.getElementById('editMaterialUnit').value.trim();
+            const initial = parseFloat(document.getElementById('editMaterialInitial').value) || 0;
+            const consumption = parseFloat(document.getElementById('editMaterialConsumption').value) || 0;
+            
+            if (!name || !unit) {
+                showAlert('لطفاً نام و واحد را وارد کنید', 'error');
+                return;
+            }
+            
+            materials[key] = {
+                name: name,
+                unit: unit,
+                initialStock: initial,
+                ringConsumption: consumption
+            };
+            
+            closeEditMaterialModal();
+            renderMaterialsList();
+            renderMaterialInputs();
+            renderMaterialRates();
+            calculateCapacity();
+            showAlert('تغییرات ذخیره شد', 'success');
+        }
+
+        function deleteMaterial(key) {
+            if (!confirm('آیا از حذف این ماده مطمئن هستید؟')) return;
+            
+            delete materials[key];
+            delete materialStocks[key];
+            
+            renderMaterialsList();
+            renderMaterialInputs();
+            renderMaterialRates();
+            calculateCapacity();
+            showAlert('ماده حذف شد', 'success');
+        }
+
+        function saveData() {
+            const data = {
+                lastUpdate: new Date().toISOString(),
+                date: document.getElementById('reportDate').value,
+                dayName: document.getElementById('dayName').value,
+                production: {
+                    rings: document.getElementById('ringsProduced').value,
+                    baskets: document.getElementById('basketsProduced').value,
+                    monthly: document.getElementById('monthlyProduction').value,
+                    yearly: document.getElementById('yearlyProduction').value,
+                    total: document.getElementById('totalProduction').value
+                },
+                materials: materials,
+                stocks: materialStocks,
+                issues: document.getElementById('issues').value,
+                suggestions: document.getElementById('suggestions').value
+            };
+            
+            localStorage.setItem('segmentData', JSON.stringify(data));
+            document.getElementById('lastSaveInfo').textContent = 'ذخیره شد در ' + new Date().toLocaleTimeString('fa-IR');
+            showAlert('✓ داده‌ها ذخیره شد', 'success');
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('segmentData');
+            if (!saved) return;
+            
+            try {
+                const data = JSON.parse(saved);
+                
+                if (data.date) document.getElementById('reportDate').value = data.date;
+                if (data.dayName) document.getElementById('dayName').value = data.dayName;
+                
+                if (data.production) {
+                    document.getElementById('ringsProduced').value = data.production.rings || 0;
+                    document.getElementById('basketsProduced').value = data.production.baskets || 0;
+                    document.getElementById('monthlyProduction').value = data.production.monthly || 0;
+                    document.getElementById('yearlyProduction').value = data.production.yearly || 0;
+                    document.getElementById('totalProduction').value = data.production.total || 0;
+                }
+                
+                if (data.materials) materials = data.materials;
+                if (data.stocks) materialStocks = data.stocks;
+                if (data.issues) document.getElementById('issues').value = data.issues;
+                if (data.suggestions) document.getElementById('suggestions').value = data.suggestions;
+                
+                if (data.lastUpdate) {
+                    document.getElementById('lastSaveInfo').textContent = 
+                        'آخرین ذخیره: ' + new Date(data.lastUpdate).toLocaleTimeString('fa-IR');
+                }
+            } catch (e) {
+                console.error('Error loading data:', e);
+            }
+        }
+
+        function exportJSON() {
+            const data = {
+                exportDate: new Date().toISOString(),
+                date: document.getElementById('reportDate').value,
+                production: {
+                    rings: document.getElementById('ringsProduced').value,
+                    baskets: document.getElementById('basketsProduced').value,
+                    monthly: document.getElementById('monthlyProduction').value,
+                    yearly: document.getElementById('yearlyProduction').value,
+                    total: document.getElementById('totalProduction').value
+                },
+                materials: materials,
+                stocks: materialStocks,
+                issues: document.getElementById('issues').value,
+                suggestions: document.getElementById('suggestions').value
+            };
+            
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'segment-data-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            showAlert('✓ فایل JSON دانلود شد', 'success');
+        }
+
+        function copyReport() {
             const date = document.getElementById('reportDate').value;
             const day = document.getElementById('dayName').value;
-            const ringsProduced = document.getElementById('ringsProduced').value || '۰';
-            const basketsProduced = document.getElementById('basketsProduced').value || '—';
-            const monthlyProduction = document.getElementById('monthlyProduction').value || '۰';
-            const yearlyProduction = document.getElementById('yearlyProduction').value || '۰';
-            const totalProduction = document.getElementById('totalProduction').value || '۰';
-            const issues = document.getElementById('issues').value || 'موردی گزارش نشده است.';
-            const suggestions = document.getElementById('suggestions').value || 'موردی گزارش نشده است.';
-            
-            const details = calculateStockDetails();
+            const rings = document.getElementById('ringsProduced').value || '۰';
             
             let report = '🔴 گزارش کارخانه تولید سگمنت\n';
             report += 'پروژه خط ۱۰ مترو تهران\n';
             report += '═══════════════════════\n\n';
             report += '📅 تاریخ: ' + date + ' (' + day + ')\n\n';
+            report += '📊 تولید روز: ' + toPersianNumber(rings) + ' رینگ\n\n';
+            report += '📦 موجودی مواد:\n';
             
-            report += '📊 اطلاعات تولید:\n';
-            report += '▫️ تولید روز: ' + toPersianNumber(ringsProduced) + ' رینگ\n';
-            if (basketsProduced !== '—') {
-                report += '▫️ سبد ساخته شده: ' + toPersianNumber(basketsProduced) + ' رینگ\n';
-            }
-            report += '▫️ تولید ماه: ' + toPersianNumber(monthlyProduction) + ' رینگ\n';
-            report += '▫️ تولید سال ۱۴۰۴: ' + toPersianNumber(yearlyProduction) + ' رینگ\n';
-            report += '▫️ تولید تجمعی کل: ' + toPersianNumber(totalProduction) + ' رینگ\n\n';
+            Object.entries(materials).forEach(([key, mat]) => {
+                const stock = materialStocks[key] || 0;
+                const ringsProduced = parseFloat(document.getElementById('ringsProduced').value) || 0;
+                const used = ringsProduced * mat.ringConsumption;
+                const remaining = Math.max(0, stock - used);
+                const capacity = Math.floor(remaining / mat.ringConsumption);
+                
+                report += '▫️ ' + mat.name + ':\n';
+                report += '   • مصرف روز: ' + toPersianNumber(Math.round(used)) + ' ' + mat.unit + '\n';
+                report += '   • باقی‌مانده: ' + toPersianNumber(Math.round(remaining)) + ' ' + mat.unit + '\n';
+                report += '   • ظرفیت: ' + toPersianNumber(capacity) + ' رینگ\n\n';
+            });
             
-            report += '📦 موجودی و مصرف مواد:\n';
-            report += '▫️ میلگرد ۸:\n';
-            report += '   • مصرف روز: ' + toPersianNumber(Math.round(details.rebar8.used)) + ' کیلوگرم\n';
-            report += '   • باقی‌مانده: ' + toPersianNumber(Math.round(details.rebar8.remaining)) + ' کیلوگرم\n';
-            report += '   • ظرفیت: ' + toPersianNumber(details.rebar8.capacity) + ' رینگ\n\n';
-            
-            report += '▫️ میلگرد ۱۲:\n';
-            report += '   • مصرف روز: ' + toPersianNumber(Math.round(details.rebar12.used)) + ' کیلوگرم\n';
-            report += '   • باقی‌مانده: ' + toPersianNumber(Math.round(details.rebar12.remaining)) + ' کیلوگرم\n';
-            report += '   • ظرفیت: ' + toPersianNumber(details.rebar12.capacity) + ' رینگ\n\n';
-            
-            report += '▫️ میلگرد ۲۰:\n';
-            report += '   • مصرف روز: ' + toPersianNumber(Math.round(details.rebar20.used)) + ' کیلوگرم\n';
-            report += '   • باقی‌مانده: ' + toPersianNumber(Math.round(details.rebar20.remaining)) + ' کیلوگرم\n';
-            report += '   • ظرفیت: ' + toPersianNumber(details.rebar20.capacity) + ' رینگ\n\n';
-            
-            report += '▫️ فوق روان‌کننده:\n';
-            report += '   • مصرف روز: ' + toPersianNumber(Math.round(details.superplasticizer.used)) + ' کیلوگرم\n';
-            report += '   • باقی‌مانده: ' + toPersianNumber(Math.round(details.superplasticizer.remaining)) + ' کیلوگرم\n';
-            report += '   • ظرفیت: ' + toPersianNumber(details.superplasticizer.capacity) + ' رینگ\n\n';
-            
-            report += '⚠️ مشکلات و موانع:\n' + issues + '\n\n';
-            report += '💡 پیشنهادات:\n' + suggestions + '\n';
-            
-            return report;
-        }
-
-        function updatePreview() {
-            updateStockDisplay();
-            document.getElementById('preview').textContent = generateReport();
-        }
-
-        function copyReport() {
-            const report = generateReport();
             navigator.clipboard.writeText(report).then(() => {
-                showAlert('✓ گزارش کپی شد!', 'success');
-            }).catch(() => {
-                const textarea = document.createElement('textarea');
-                textarea.value = report;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showAlert('✓ گزارش کپی شد!', 'success');
+                showAlert('✓ گزارش کپی شد', 'success');
             });
         }
 
-        function downloadReport() {
-            const report = generateReport();
-            const date = document.getElementById('reportDate').value.replace(/\//g, '-');
-            const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'گزارش-سگمنت-' + date + '.txt';
-            link.click();
-        }
-
-        function saveToLocalStorage() {
-            const data = {
-                lastUpdate: new Date().toISOString(),
-                date: document.getElementById('reportDate').value,
-                dayName: document.getElementById('dayName').value,
-                ringsProduced: document.getElementById('ringsProduced').value,
-                basketsProduced: document.getElementById('basketsProduced').value,
-                monthlyProduction: document.getElementById('monthlyProduction').value,
-                yearlyProduction: document.getElementById('yearlyProduction').value,
-                totalProduction: document.getElementById('totalProduction').value,
-                stock: {
-                    rebar8: document.getElementById('rebar8Stock').value,
-                    rebar12: document.getElementById('rebar12Stock').value,
-                    rebar20: document.getElementById('rebar20Stock').value,
-                    superplasticizer: document.getElementById('superplasticizerStock').value,
-                    microsilica: document.getElementById('microsilicaStock').value
-                },
-                issues: document.getElementById('issues').value,
-                suggestions: document.getElementById('suggestions').value
-            };
-            localStorage.setItem('currentReport', JSON.stringify(data));
-        }
-
-        function loadFromLocalStorage() {
-            const saved = localStorage.getItem('currentReport');
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    
-                    if (data.date) {
-                        const parts = data.date.split('/');
-                        if (parts.length === 3) {
-                            selectedJalaliDate = {
-                                year: parseInt(parts[0]),
-                                month: parseInt(parts[1]),
-                                day: parseInt(parts[2])
-                            };
-                            updateDateDisplay();
-                        }
-                    }
-                    
-                    document.getElementById('ringsProduced').value = data.ringsProduced || '0';
-                    document.getElementById('basketsProduced').value = data.basketsProduced || '';
-                    document.getElementById('monthlyProduction').value = data.monthlyProduction || '0';
-                    document.getElementById('yearlyProduction').value = data.yearlyProduction || '0';
-                    document.getElementById('totalProduction').value = data.totalProduction || '0';
-                    
-                    if (data.stock) {
-                        document.getElementById('rebar8Stock').value = data.stock.rebar8 || '0';
-                        document.getElementById('rebar12Stock').value = data.stock.rebar12 || '0';
-                        document.getElementById('rebar20Stock').value = data.stock.rebar20 || '0';
-                        document.getElementById('superplasticizerStock').value = data.stock.superplasticizer || '0';
-                        document.getElementById('microsilicaStock').value = data.stock.microsilica || '0';
-                    }
-                    
-                    document.getElementById('issues').value = data.issues || '';
-                    document.getElementById('suggestions').value = data.suggestions || '';
-                    
-                    updatePreview();
-                } catch (e) {
-                    console.error('Error loading from localStorage:', e);
-                }
-            }
-        }
-
-        // Settings Functions
-        function openSettings() {
-            document.getElementById('settingsModal').classList.add('show');
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsModal').classList.remove('show');
-        }
-
-        function saveSettings() {
-            materialRates.rebar8 = parseFloat(document.getElementById('setting_rebar8').value) || 736;
-            materialRates.rebar12 = parseFloat(document.getElementById('setting_rebar12').value) || 758;
-            materialRates.rebar20 = parseFloat(document.getElementById('setting_rebar20').value) || 250;
-            materialRates.superplasticizer = parseFloat(document.getElementById('setting_superplasticizer').value) || 45;
-            
-            config.maxHistory = parseInt(document.getElementById('setting_maxHistory').value) || 30;
-            config.autoBackup = document.getElementById('setting_autoBackup').value === 'true';
-            
-            updateMaterialRatesDisplay();
-            localStorage.setItem('materialRates', JSON.stringify(materialRates));
-            localStorage.setItem('config', JSON.stringify(config));
-            
-            // Update backup badge
-            const badge = document.getElementById('backupBadge');
-            badge.textContent = config.autoBackup ? '💾 پشتیبان فعال' : '⚠️ پشتیبان غیرفعال';
-            badge.className = config.autoBackup ? 'badge success' : 'badge';
-            
-            updatePreview();
-            closeSettings();
-            showAlert('✓ تنظیمات ذخیره شد', 'success');
-        }
-
-        function loadSettings() {
-            const savedRates = localStorage.getItem('materialRates');
-            if (savedRates) {
-                materialRates = JSON.parse(savedRates);
-                updateMaterialRatesDisplay();
-            }
-            
-            const savedConfig = localStorage.getItem('config');
-            if (savedConfig) {
-                config = JSON.parse(savedConfig);
-                document.getElementById('setting_maxHistory').value = config.maxHistory;
-                document.getElementById('setting_autoBackup').value = config.autoBackup.toString();
-                
-                const badge = document.getElementById('backupBadge');
-                badge.textContent = config.autoBackup ? '💾 پشتیبان فعال' : '⚠️ پشتیبان غیرفعال';
-                badge.className = config.autoBackup ? 'badge success' : 'badge';
-            }
-        }
-
-        function updateMaterialRatesDisplay() {
-            document.getElementById('setting_rebar8').value = materialRates.rebar8;
-            document.getElementById('setting_rebar12').value = materialRates.rebar12;
-            document.getElementById('setting_rebar20').value = materialRates.rebar20;
-            document.getElementById('setting_superplasticizer').value = materialRates.superplasticizer;
-            
-            document.getElementById('display_rebar8').textContent = toPersianNumber(materialRates.rebar8);
-            document.getElementById('display_rebar12').textContent = toPersianNumber(materialRates.rebar12);
-            document.getElementById('display_rebar20').textContent = toPersianNumber(materialRates.rebar20);
-            document.getElementById('display_superplasticizer').textContent = toPersianNumber(materialRates.superplasticizer);
-        }
-
-        // UI Functions
         function showAlert(message, type = 'success') {
             const alert = document.getElementById('alert');
             alert.textContent = message;
@@ -984,20 +762,23 @@
             setTimeout(() => alert.classList.remove('show'), 3000);
         }
 
-        // Close modals on outside click
         document.addEventListener('click', function(e) {
+            const modals = ['materialsModal', 'editMaterialModal'];
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+            
             const calendar = document.getElementById('calendar');
             const dateInput = document.getElementById('reportDate');
             if (calendar && !calendar.contains(e.target) && e.target !== dateInput) {
-                calendar.classList.remove('show');
+                calendar.style.display = 'none';
             }
-            
-            const settingsModal = document.getElementById('settingsModal');
-            if (e.target === settingsModal) closeSettings();
-            
-            const historyModal = document.getElementById('historyModal');
-            if (e.target === historyModal) closeHistory();
         });
+
+        window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
