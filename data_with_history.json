@@ -1,42 +1,75 @@
 {
-  "version": "2.0",
-  "currentReport": {
-    "lastUpdate": "2025-11-08T00:00:00.000Z",
-    "date": "",
-    "dayName": "",
-    "ringsProduced": "0",
-    "basketsProduced": "",
-    "monthlyProduction": "0",
-    "yearlyProduction": "0",
-    "totalProduction": "0",
-    "stock": {
-      "rebar8": "0",
-      "rebar12": "0",
-      "rebar20": "0",
-      "superplasticizer": "0",
-      "microsilica": "0"
-    },
-    "issues": "",
-    "suggestions": ""
+  "version": "3.0",
+  "lastUpdate": "2025-11-08T21:30:00.000Z",
+  "date": "۱۴۰۴/۰۸/۱۸",
+  "dayName": "شنبه",
+  "production": {
+    "rings": "4",
+    "baskets": "2",
+    "monthly": "62",
+    "yearly": "429",
+    "total": "1073"
   },
-  "reportHistory": [
+  "materials": {
+    "rebar8": {
+      "name": "میلگرد ۸",
+      "unit": "کیلوگرم",
+      "initialStock": 15000,
+      "ringConsumption": 736
+    },
+    "rebar12": {
+      "name": "میلگرد ۱۲",
+      "unit": "کیلوگرم",
+      "initialStock": 18000,
+      "ringConsumption": 758
+    },
+    "rebar20": {
+      "name": "میلگرد ۲۰",
+      "unit": "کیلوگرم",
+      "initialStock": 5000,
+      "ringConsumption": 250
+    },
+    "superplasticizer": {
+      "name": "فوق روان‌کننده",
+      "unit": "کیلوگرم",
+      "initialStock": 900,
+      "ringConsumption": 45
+    },
+    "mat_1699456789": {
+      "name": "سیمان پرتلند",
+      "unit": "تن",
+      "initialStock": 50,
+      "ringConsumption": 2.5
+    }
+  },
+  "stocks": {
+    "rebar8": 14000,
+    "rebar12": 17000,
+    "rebar20": 4800,
+    "superplasticizer": 850,
+    "mat_1699456789": 48
+  },
+  "issues": "کمبود میلگرد شماره ۲۰ در انبار",
+  "suggestions": "سفارش فوری ۵ تن میلگرد ۲۰",
+  "history": [
     {
-      "savedAt": "2025-11-08T00:00:00.000Z",
-      "date": "1404/08/18",
-      "ringsProduced": "4",
-      "totalProduction": "1073",
-      "note": "نمونه گزارش اولیه"
+      "timestamp": "2025-11-08T20:00:00.000Z",
+      "date": "۱۴۰۴/۰۸/۱۸",
+      "dayName": "شنبه",
+      "production": {
+        "rings": "4",
+        "baskets": "2",
+        "monthly": "62",
+        "yearly": "429",
+        "total": "1073"
+      },
+      "materials": "...",
+      "stocks": "...",
+      "note": "گزارش روزانه"
     }
   ],
-  "materialRates": {
-    "rebar8": 736,
-    "rebar12": 758,
-    "rebar20": 250,
-    "superplasticizer": 45
-  },
-  "backups": {
+  "config": {
     "autoBackup": true,
-    "maxHistoryItems": 30,
-    "lastBackupDate": "2025-11-08T00:00:00.000Z"
+    "maxHistory": 30
   }
 }
