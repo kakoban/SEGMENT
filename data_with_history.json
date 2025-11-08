@@ -1,0 +1,42 @@
+{
+  "version": "2.0",
+  "currentReport": {
+    "lastUpdate": "2025-11-08T00:00:00.000Z",
+    "date": "",
+    "dayName": "",
+    "ringsProduced": "0",
+    "basketsProduced": "",
+    "monthlyProduction": "0",
+    "yearlyProduction": "0",
+    "totalProduction": "0",
+    "stock": {
+      "rebar8": "0",
+      "rebar12": "0",
+      "rebar20": "0",
+      "superplasticizer": "0",
+      "microsilica": "0"
+    },
+    "issues": "",
+    "suggestions": ""
+  },
+  "reportHistory": [
+    {
+      "savedAt": "2025-11-08T00:00:00.000Z",
+      "date": "1404/08/18",
+      "ringsProduced": "4",
+      "totalProduction": "1073",
+      "note": "نمونه گزارش اولیه"
+    }
+  ],
+  "materialRates": {
+    "rebar8": 736,
+    "rebar12": 758,
+    "rebar20": 250,
+    "superplasticizer": 45
+  },
+  "backups": {
+    "autoBackup": true,
+    "maxHistoryItems": 30,
+    "lastBackupDate": "2025-11-08T00:00:00.000Z"
+  }
+}
