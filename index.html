@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>گزارش کارخانه تولید سگمنت</title>
+    <title>گزارش کارخانه تولید سگمنت - نسخه پیشرفته</title>
     <style>
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #EBF4FF 0%, #E0E7FF 100%); min-height: 100vh; padding: 1rem;}
@@ -13,23 +13,27 @@
         .header-title {display: flex; align-items: center; gap: 0.75rem;}
         .header h1 {font-size: 1.5rem; font-weight: bold;}
         .header p {color: #FEE2E2; font-size: 0.875rem; margin-top: 0.25rem;}
-        .today-badge {background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.75rem; cursor: pointer;}
-        .today-badge:hover {background: rgba(255,255,255,0.3);}
+        .badge {background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;}
+        .badge:hover {background: rgba(255,255,255,0.3);}
+        .badge.success {background: rgba(16, 185, 129, 0.3);}
         .icon {width: 2rem; height: 2rem; stroke: currentColor; stroke-width: 2; fill: none;}
         .form-container {background: white; border-radius: 0 0 1rem 1rem; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
         .section {margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #E5E7EB;}
         .section:last-of-type {border-bottom: none;}
         .section-title {font-size: 1.125rem; font-weight: bold; color: #1F2937; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;}
-        .section-title .icon {width: 1.25rem; height: 1.25rem;}
         .grid {display: grid; gap: 1rem; grid-template-columns: 1fr;}
         @media (min-width: 768px) {.grid {grid-template-columns: repeat(2, 1fr);} .form-container {padding: 2.5rem;}}
         .form-group {display: flex; flex-direction: column;}
         label {font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem;}
-        input, textarea {padding: 0.75rem 1rem; border: 2px solid #D1D5DB; border-radius: 0.5rem; font-size: 1rem; transition: all 0.2s; font-family: inherit;}
-        input:focus, textarea:focus {outline: none; border-color: #6366F1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);}
+        input, textarea, select {padding: 0.75rem 1rem; border: 2px solid #D1D5DB; border-radius: 0.5rem; font-size: 1rem; transition: all 0.2s; font-family: inherit;}
+        input:focus, textarea:focus, select:focus {outline: none; border-color: #6366F1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);}
         textarea {resize: vertical; min-height: 100px;}
         .info-box {background: #F0F9FF; border: 2px solid #3B82F6; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;}
+        .info-box.warning {background: #FEF3C7; border-color: #F59E0B;}
+        .info-box.success {background: #D1FAE5; border-color: #10B981;}
         .info-box h3 {font-size: 0.875rem; font-weight: bold; color: #1E40AF; margin-bottom: 0.5rem;}
+        .info-box.warning h3 {color: #92400E;}
+        .info-box.success h3 {color: #065F46;}
         .info-table {width: 100%; border-collapse: collapse; font-size: 0.875rem;}
         .info-table td {padding: 0.5rem; border-bottom: 1px solid #BFDBFE;}
         .info-table td:first-child {font-weight: 600; color: #1E40AF;}
@@ -43,23 +47,27 @@
         .stock-item.low .stock-item-value {color: #DC2626;}
         .stock-item.warning {background: #FEF3C7; border-color: #FCD34D;}
         .stock-item.warning .stock-item-value {color: #D97706;}
-        .button-group {display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; margin-top: 2rem;}
-        button {padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
-        button:hover {transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15);}
+        .button-group {display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin-top: 2rem;}
+        button {padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);}
+        button:hover:not(:disabled) {transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15);}
         button:disabled {opacity: 0.6; cursor: not-allowed; transform: none;}
         .btn-save {background: linear-gradient(to left, #10B981 0%, #059669 100%); color: white;}
         .btn-load {background: linear-gradient(to left, #3B82F6 0%, #2563EB 100%); color: white;}
         .btn-copy {background: linear-gradient(to left, #6366F1 0%, #4F46E5 100%); color: white;}
         .btn-download {background: linear-gradient(to left, #059669 0%, #047857 100%); color: white;}
+        .btn-history {background: linear-gradient(to left, #F59E0B 0%, #D97706 100%); color: white;}
         .btn-settings {background: linear-gradient(to left, #8B5CF6 0%, #7C3AED 100%); color: white;}
+        .btn-danger {background: linear-gradient(to left, #EF4444 0%, #DC2626 100%); color: white;}
         .preview {margin-top: 2rem; padding: 1rem; background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 0.5rem;}
         .preview h3 {font-size: 0.875rem; font-weight: bold; color: #374151; margin-bottom: 0.75rem;}
         .preview pre {font-size: 0.75rem; color: #1F2937; white-space: pre-wrap; word-wrap: break-word; font-family: 'Courier New', monospace; line-height: 1.6;}
         .alert {position: fixed; top: 2rem; left: 50%; transform: translateX(-50%) translateY(-100px); background: #10B981; color: white; padding: 1rem 2rem; border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); opacity: 0; transition: all 0.3s; z-index: 1000; font-weight: bold;}
         .alert.show {transform: translateX(-50%) translateY(0); opacity: 1;}
+        .alert.error {background: #EF4444;}
+        .alert.warning {background: #F59E0B;}
         .modal {display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center; padding: 1rem;}
         .modal.show {display: flex;}
-        .modal-content {background: white; border-radius: 1rem; padding: 2rem; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;}
+        .modal-content {background: white; border-radius: 1rem; padding: 2rem; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;}
         .modal-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 2px solid #E5E7EB;}
         .modal-header h2 {font-size: 1.25rem; color: #1F2937;}
         .modal-close {background: #EF4444; color: white; border: none; border-radius: 0.375rem; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.875rem; font-weight: bold;}
@@ -68,6 +76,12 @@
         .settings-item {display: grid; grid-template-columns: 2fr 1fr; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;}
         .settings-item label {margin: 0;}
         .settings-item input {padding: 0.5rem;}
+        .history-list {max-height: 400px; overflow-y: auto;}
+        .history-item {background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 0.5rem; padding: 1rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s;}
+        .history-item:hover {border-color: #6366F1; background: #EEF2FF;}
+        .history-item.current {border-color: #10B981; background: #D1FAE5;}
+        .history-date {font-weight: bold; color: #1F2937; margin-bottom: 0.5rem;}
+        .history-info {font-size: 0.875rem; color: #6B7280; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;}
         .calendar {display: none; position: absolute; top: 100%; left: 0; right: 0; margin-top: 0.5rem; background: white; border: 2px solid #6366F1; border-radius: 0.75rem; box-shadow: 0 10px 40px rgba(0,0,0,0.15); z-index: 100; padding: 1rem;}
         .calendar.show {display: block;}
         .calendar-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid #E5E7EB;}
@@ -97,27 +111,6 @@
             </div>
             
             <div class="settings-group">
-                <h3>🔗 آدرس سرور JSON</h3>
-                <p style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.75rem; line-height: 1.5;">
-                    <strong>گزینه ۱: GitHub Pages (رایگان)</strong><br>
-                    • فایل data.json را در مخزن GitHub بگذارید<br>
-                    • آدرس: <code style="font-size: 0.75rem;">https://username.github.io/repo/data.json</code>
-                </p>
-                <p style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.75rem; line-height: 1.5;">
-                    <strong>گزینه ۲: سرویس‌های رایگان</strong><br>
-                    • <a href="https://npoint.io" target="_blank" style="color: #3B82F6;">npoint.io</a> - سریع و ساده<br>
-                    • <a href="https://jsonbin.io" target="_blank" style="color: #3B82F6;">jsonbin.io</a> - با API
-                </p>
-                <p style="font-size: 0.875rem; color: #6B7280; margin-bottom: 0.75rem; line-height: 1.5;">
-                    <strong>گزینه ۳: سرور اختصاصی</strong><br>
-                    • فایل JSON را در سرور خود قرار دهید<br>
-                    • CORS را فعال کنید
-                </p>
-                <input type="text" id="serverUrl" placeholder="https://your-server.com/data.json" style="width: 100%; margin-bottom: 1rem;">
-                <button class="btn-copy" onclick="saveServerUrl()" style="width: 100%;">✓ ذخیره آدرس</button>
-            </div>
-            
-            <div class="settings-group">
                 <h3>📊 مصرف میلگرد (کیلوگرم در رینگ)</h3>
                 <div class="settings-item">
                     <label>آرماتور شماره ۸</label>
@@ -141,9 +134,52 @@
                 </div>
             </div>
 
+            <div class="settings-group">
+                <h3>💾 تنظیمات پشتیبان‌گیری</h3>
+                <div class="settings-item">
+                    <label>حداکثر تاریخچه</label>
+                    <input type="number" id="setting_maxHistory" value="30" min="10" max="100">
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>پشتیبان خودکار قبل از ذخیره</label>
+                    <select id="setting_autoBackup">
+                        <option value="true">فعال</option>
+                        <option value="false">غیرفعال</option>
+                    </select>
+                </div>
+            </div>
+
             <button class="btn-copy" onclick="saveSettings()" style="width: 100%; margin-top: 1rem;">
                 ✓ ذخیره تنظیمات
             </button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal" id="historyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📜 تاریخچه گزارش‌ها</h2>
+                <button class="modal-close" onclick="closeHistory()">بستن</button>
+            </div>
+            
+            <div class="info-box warning">
+                <h3>⚠️ توجه</h3>
+                <p style="font-size: 0.875rem; color: #92400E;">با کلیک روی هر گزارش، اطلاعات آن بازیابی می‌شود. گزارش فعلی قبل از بازیابی در تاریخچه ذخیره می‌شود.</p>
+            </div>
+            
+            <div class="history-list" id="historyList">
+                <p style="text-align: center; color: #6B7280; padding: 2rem;">هیچ گزارش قبلی وجود ندارد</p>
+            </div>
+            
+            <div class="button-group" style="margin-top: 1rem;">
+                <button class="btn-danger" onclick="clearHistory()">
+                    🗑️ پاک کردن تاریخچه
+                </button>
+                <button class="btn-download" onclick="exportHistory()">
+                    📥 صادرات تاریخچه
+                </button>
+            </div>
         </div>
     </div>
 
@@ -159,24 +195,33 @@
                     </svg>
                     <div>
                         <h1>گزارش کارخانه تولید سگمنت</h1>
-                        <p>🔴 پروژه خط ۱۰ مترو تهران</p>
+                        <p>🔴 پروژه خط ۱۰ مترو تهران - نسخه پیشرفته</p>
                     </div>
                 </div>
-                <div class="today-badge" onclick="setToday()" id="todayBadge">امروز</div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <div class="badge" onclick="setToday()" id="todayBadge">📅 امروز</div>
+                    <div class="badge success" id="backupBadge">💾 پشتیبان فعال</div>
+                </div>
             </div>
         </div>
 
         <div class="form-container">
+            <!-- Warning Box -->
+            <div class="info-box warning" id="warningBox" style="display: none;">
+                <h3>⚠️ هشدار: تغییرات ذخیره نشده</h3>
+                <p style="font-size: 0.875rem; color: #92400E;">تغییرات شما هنوز ذخیره نشده است. قبل از بستن صفحه حتماً ذخیره کنید.</p>
+            </div>
+
+            <!-- Success Box -->
+            <div class="info-box success" id="successBox" style="display: none;">
+                <h3>✓ آخرین ذخیره</h3>
+                <p style="font-size: 0.875rem; color: #065F46;" id="lastSaveInfo">هنوز ذخیره نشده</p>
+            </div>
+
             <!-- تاریخ گزارش -->
             <div class="section">
                 <h2 class="section-title">
-                    <svg class="icon" viewBox="0 0 24 24" stroke="#6366F1">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    تاریخ گزارش
+                    📅 تاریخ گزارش
                 </h2>
                 <div class="grid">
                     <div class="form-group">
@@ -196,12 +241,7 @@
             <!-- اطلاعات تولید -->
             <div class="section">
                 <h2 class="section-title">
-                    <svg class="icon" viewBox="0 0 24 24" stroke="#059669">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                    </svg>
-                    اطلاعات تولید
+                    📊 اطلاعات تولید
                 </h2>
 
                 <div class="info-box">
@@ -241,12 +281,7 @@
             <!-- موجودی مواد اولیه -->
             <div class="section">
                 <h2 class="section-title">
-                    <svg class="icon" viewBox="0 0 24 24" stroke="#3B82F6">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                    </svg>
-                    موجودی مواد اولیه
+                    📦 موجودی مواد اولیه
                 </h2>
                 <div class="grid">
                     <div class="form-group">
@@ -278,12 +313,7 @@
             <!-- مشکلات و موانع -->
             <div class="section">
                 <h2 class="section-title">
-                    <svg class="icon" viewBox="0 0 24 24" stroke="#DC2626">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    مشکلات و موانع
+                    ⚠️ مشکلات و موانع
                 </h2>
                 <div class="form-group">
                     <textarea id="issues" placeholder="مشکلات و موانع را وارد کنید..."></textarea>
@@ -293,11 +323,7 @@
             <!-- پیشنهادات -->
             <div class="section">
                 <h2 class="section-title">
-                    <svg class="icon" viewBox="0 0 24 24" stroke="#EAB308">
-                        <path d="M12 2v20"></path>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                    </svg>
-                    پیشنهادات
+                    💡 پیشنهادات
                 </h2>
                 <div class="form-group">
                     <textarea id="suggestions" placeholder="پیشنهادات را وارد کنید..."></textarea>
@@ -309,17 +335,17 @@
                 <button class="btn-settings" onclick="openSettings()">
                     ⚙️ تنظیمات
                 </button>
-                <button class="btn-save" onclick="saveToServer()">
-                    💾 ذخیره در سرور
+                <button class="btn-history" onclick="openHistory()">
+                    📜 تاریخچه
                 </button>
-                <button class="btn-load" onclick="loadFromServer()">
-                    📥 بارگذاری از سرور
+                <button class="btn-save" onclick="saveWithBackup()" id="saveBtn">
+                    💾 ذخیره امن
                 </button>
                 <button class="btn-copy" onclick="copyReport()">
-                    📋 کپی گزارش
+                    📋 کپی
                 </button>
                 <button class="btn-download" onclick="downloadReport()">
-                    💾 دانلود گزارش
+                    📥 دانلود
                 </button>
             </div>
 
@@ -331,8 +357,14 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/jalaali-js@1.2.6/dist/jalaali.min.js"></script>
     <script>
         // Configuration
+        let config = {
+            maxHistory: 30,
+            autoBackup: true
+        };
+        
         let materialRates = {
             rebar8: 736,
             rebar12: 758,
@@ -340,56 +372,21 @@
             superplasticizer: 45
         };
 
+        let reportHistory = [];
+        let hasUnsavedChanges = false;
+
         const persianMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
         const persianDays = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];
 
         let currentJalaliDate, selectedJalaliDate, calendarDisplayMonth, calendarDisplayYear;
 
-        // Jalali Date Functions
+        // Jalali Date Functions using jalaali-js library
         function toJalali(gy, gm, gd) {
-            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-            let jy, jm, jd, gy2, days;
-            gy2 = (gm > 2) ? (gy + 1) : gy;
-            days = 355666 + (365 * gy) + ~~((gy2 + 3) / 4) - ~~((gy2 + 99) / 100) + ~~((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
-            jy = -1595 + 33 * ~~(days / 12053);
-            days %= 12053;
-            jy += 4 * ~~(days / 1461);
-            days %= 1461;
-            if (days > 365) {
-                jy += ~~((days - 1) / 365);
-                days = (days - 1) % 365;
-            }
-            if (days < 186) {
-                jm = 1 + ~~(days / 31);
-                jd = 1 + (days % 31);
-            } else {
-                jm = 7 + ~~((days - 186) / 30);
-                jd = 1 + ((days - 186) % 30);
-            }
-            return { year: jy, month: jm, day: jd };
+            return jalaali.toJalaali(gy, gm, gd);
         }
 
         function toGregorian(jy, jm, jd) {
-            let gy, gm, gd_calc, days;
-            jy += 1595;
-            days = 365 * jy + ~~(jy / 33) * 8 + ~~((jy % 33 + 3) / 4) + 78 + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30 + 186));
-            gy = 400 * ~~(days / 146097);
-            days %= 146097;
-            if (days > 36524) {
-                gy += 100 * ~~(--days / 36524);
-                days %= 36524;
-                if (days >= 365) days++;
-            }
-            gy += 4 * ~~(days / 1461);
-            days %= 1461;
-            if (days > 365) {
-                gy += ~~((days - 1) / 365);
-                days = (days - 1) % 365;
-            }
-            gd_calc = days + 1;
-            const sal_b = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            for (gm = 0; gm < 13 && gd_calc > sal_b[gm]; gm++) gd_calc -= sal_b[gm];
-            return { year: gy, month: gm, day: gd_calc };
+            return jalaali.toGregorian(jy, jm, jd);
         }
 
         function toPersianNumber(num) {
@@ -408,19 +405,198 @@
             updateDateDisplay();
             updatePreview();
             loadSettings();
-            loadServerUrl();
+            loadHistory();
             
             document.getElementById('reportDate').addEventListener('click', toggleCalendar);
             document.querySelectorAll('input, textarea').forEach(el => {
                 el.addEventListener('input', () => {
+                    markAsUnsaved();
                     updatePreview();
-                    saveToLocalStorage();
                 });
             });
             
             renderCalendar();
             loadFromLocalStorage();
+            
+            // Warn before closing if unsaved
+            window.addEventListener('beforeunload', (e) => {
+                if (hasUnsavedChanges) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                }
+            });
         });
+
+        function markAsUnsaved() {
+            hasUnsavedChanges = true;
+            document.getElementById('warningBox').style.display = 'block';
+            document.getElementById('successBox').style.display = 'none';
+        }
+
+        function markAsSaved() {
+            hasUnsavedChanges = false;
+            document.getElementById('warningBox').style.display = 'none';
+            document.getElementById('successBox').style.display = 'block';
+            const now = new Date();
+            document.getElementById('lastSaveInfo').textContent = 
+                'ذخیره شد در ' + now.toLocaleTimeString('fa-IR');
+        }
+
+        // Backup and Save Functions
+        function saveWithBackup() {
+            if (config.autoBackup) {
+                createBackup();
+            }
+            saveToLocalStorage();
+            markAsSaved();
+            showAlert('✓ گزارش با موفقیت ذخیره شد', 'success');
+        }
+
+        function createBackup() {
+            const backup = {
+                timestamp: new Date().toISOString(),
+                date: document.getElementById('reportDate').value,
+                dayName: document.getElementById('dayName').value,
+                ringsProduced: document.getElementById('ringsProduced').value,
+                basketsProduced: document.getElementById('basketsProduced').value,
+                monthlyProduction: document.getElementById('monthlyProduction').value,
+                yearlyProduction: document.getElementById('yearlyProduction').value,
+                totalProduction: document.getElementById('totalProduction').value,
+                stock: {
+                    rebar8: document.getElementById('rebar8Stock').value,
+                    rebar12: document.getElementById('rebar12Stock').value,
+                    rebar20: document.getElementById('rebar20Stock').value,
+                    superplasticizer: document.getElementById('superplasticizerStock').value,
+                    microsilica: document.getElementById('microsilicaStock').value
+                },
+                issues: document.getElementById('issues').value,
+                suggestions: document.getElementById('suggestions').value
+            };
+            
+            reportHistory.unshift(backup);
+            
+            // Keep only max history items
+            if (reportHistory.length > config.maxHistory) {
+                reportHistory = reportHistory.slice(0, config.maxHistory);
+            }
+            
+            localStorage.setItem('reportHistory', JSON.stringify(reportHistory));
+        }
+
+        function loadHistory() {
+            const saved = localStorage.getItem('reportHistory');
+            if (saved) {
+                reportHistory = JSON.parse(saved);
+            }
+        }
+
+        function openHistory() {
+            renderHistoryList();
+            document.getElementById('historyModal').classList.add('show');
+        }
+
+        function closeHistory() {
+            document.getElementById('historyModal').classList.remove('show');
+        }
+
+        function renderHistoryList() {
+            const list = document.getElementById('historyList');
+            
+            if (reportHistory.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #6B7280; padding: 2rem;">هیچ گزارش قبلی وجود ندارد</p>';
+                return;
+            }
+            
+            let html = '';
+            reportHistory.forEach((item, index) => {
+                const timestamp = new Date(item.timestamp);
+                const isRecent = index === 0;
+                
+                html += '<div class="history-item' + (isRecent ? ' current' : '') + '" onclick="restoreFromHistory(' + index + ')">';
+                html += '<div class="history-date">' + (item.date || 'بدون تاریخ') + ' - ' + (item.dayName || '') + '</div>';
+                html += '<div class="history-info">';
+                html += '<span>تولید: ' + toPersianNumber(item.ringsProduced || '0') + ' رینگ</span>';
+                html += '<span>تجمعی: ' + toPersianNumber(item.totalProduction || '0') + ' رینگ</span>';
+                html += '<span>' + timestamp.toLocaleDateString('fa-IR') + ' ' + timestamp.toLocaleTimeString('fa-IR') + '</span>';
+                html += '</div>';
+                html += '</div>';
+            });
+            
+            list.innerHTML = html;
+        }
+
+        function restoreFromHistory(index) {
+            if (!confirm('آیا مطمئن هستید؟ گزارش فعلی در تاریخچه ذخیره می‌شود.')) {
+                return;
+            }
+            
+            // Save current before restoring
+            createBackup();
+            
+            const item = reportHistory[index];
+            
+            // Restore data
+            if (item.date) {
+                const parts = item.date.split('/');
+                if (parts.length === 3) {
+                    selectedJalaliDate = {
+                        year: parseInt(parts[0]),
+                        month: parseInt(parts[1]),
+                        day: parseInt(parts[2])
+                    };
+                    updateDateDisplay();
+                }
+            }
+            
+            document.getElementById('ringsProduced').value = item.ringsProduced || '0';
+            document.getElementById('basketsProduced').value = item.basketsProduced || '';
+            document.getElementById('monthlyProduction').value = item.monthlyProduction || '0';
+            document.getElementById('yearlyProduction').value = item.yearlyProduction || '0';
+            document.getElementById('totalProduction').value = item.totalProduction || '0';
+            
+            if (item.stock) {
+                document.getElementById('rebar8Stock').value = item.stock.rebar8 || '0';
+                document.getElementById('rebar12Stock').value = item.stock.rebar12 || '0';
+                document.getElementById('rebar20Stock').value = item.stock.rebar20 || '0';
+                document.getElementById('superplasticizerStock').value = item.stock.superplasticizer || '0';
+                document.getElementById('microsilicaStock').value = item.stock.microsilica || '0';
+            }
+            
+            document.getElementById('issues').value = item.issues || '';
+            document.getElementById('suggestions').value = item.suggestions || '';
+            
+            updatePreview();
+            closeHistory();
+            showAlert('✓ گزارش بازیابی شد', 'success');
+        }
+
+        function clearHistory() {
+            if (!confirm('آیا مطمئن هستید که می‌خواهید تمام تاریخچه را پاک کنید؟')) {
+                return;
+            }
+            
+            reportHistory = [];
+            localStorage.removeItem('reportHistory');
+            renderHistoryList();
+            showAlert('✓ تاریخچه پاک شد', 'success');
+        }
+
+        function exportHistory() {
+            const data = {
+                exportDate: new Date().toISOString(),
+                history: reportHistory,
+                config: config,
+                materialRates: materialRates
+            };
+            
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'تاریخچه-گزارشات-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            showAlert('✓ تاریخچه صادر شد', 'success');
+        }
 
         function setToday() {
             const now = new Date();
@@ -436,7 +612,7 @@
         function updateDateDisplay() {
             const jalali = selectedJalaliDate;
             const gregorian = toGregorian(jalali.year, jalali.month, jalali.day);
-            const date = new Date(gregorian.year, gregorian.month - 1, gregorian.day);
+            const date = new Date(gregorian.gy, gregorian.gm - 1, gregorian.gd);
             const dayOfWeek = date.getDay();
             
             document.getElementById('reportDate').value = 
@@ -446,12 +622,11 @@
             
             document.getElementById('dayName').value = persianDays[dayOfWeek];
             
-            // Update today badge
             const isToday = jalali.year === currentJalaliDate.year && 
                            jalali.month === currentJalaliDate.month && 
                            jalali.day === currentJalaliDate.day;
             const badge = document.getElementById('todayBadge');
-            badge.textContent = isToday ? '✓ امروز' : 'امروز';
+            badge.textContent = isToday ? '✓ امروز' : '📅 امروز';
             
             updatePreview();
         }
@@ -476,7 +651,7 @@
             html += '</div><div class="calendar-days">';
             
             const firstDayOfMonth = toGregorian(calendarDisplayYear, calendarDisplayMonth, 1);
-            const firstDate = new Date(firstDayOfMonth.year, firstDayOfMonth.month - 1, firstDayOfMonth.day);
+            const firstDate = new Date(firstDayOfMonth.gy, firstDayOfMonth.gm - 1, firstDayOfMonth.gd);
             const firstDayOfWeek = (firstDate.getDay() + 1) % 7;
             const daysInMonth = calendarDisplayMonth <= 6 ? 31 : (calendarDisplayMonth <= 11 ? 30 : 29);
             
@@ -508,6 +683,7 @@
             selectedJalaliDate = { year: calendarDisplayYear, month: calendarDisplayMonth, day: day };
             updateDateDisplay();
             toggleCalendar();
+            markAsUnsaved();
         }
 
         function previousMonth() {
@@ -528,7 +704,7 @@
             renderCalendar();
         }
 
-        // Stock Calculation with Remaining
+        // Stock Calculation
         function calculateStockDetails() {
             const ringsProduced = parseFloat(document.getElementById('ringsProduced').value) || 0;
             
@@ -537,19 +713,16 @@
             const rebar20Stock = parseFloat(document.getElementById('rebar20Stock').value) || 0;
             const superplasticizerStock = parseFloat(document.getElementById('superplasticizerStock').value) || 0;
             
-            // Calculate consumption for today's production
             const rebar8Used = ringsProduced * materialRates.rebar8;
             const rebar12Used = ringsProduced * materialRates.rebar12;
             const rebar20Used = ringsProduced * materialRates.rebar20;
             const superplasticizerUsed = ringsProduced * materialRates.superplasticizer;
             
-            // Calculate remaining stock
             const rebar8Remaining = Math.max(0, rebar8Stock - rebar8Used);
             const rebar12Remaining = Math.max(0, rebar12Stock - rebar12Used);
             const rebar20Remaining = Math.max(0, rebar20Stock - rebar20Used);
             const superplasticizerRemaining = Math.max(0, superplasticizerStock - superplasticizerUsed);
             
-            // Calculate capacity from remaining
             const rebar8Capacity = Math.floor(rebar8Remaining / materialRates.rebar8);
             const rebar12Capacity = Math.floor(rebar12Remaining / materialRates.rebar12);
             const rebar20Capacity = Math.floor(rebar20Remaining / materialRates.rebar20);
@@ -652,7 +825,7 @@
         function copyReport() {
             const report = generateReport();
             navigator.clipboard.writeText(report).then(() => {
-                showAlert('✓ گزارش کپی شد!');
+                showAlert('✓ گزارش کپی شد!', 'success');
             }).catch(() => {
                 const textarea = document.createElement('textarea');
                 textarea.value = report;
@@ -660,7 +833,7 @@
                 textarea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
-                showAlert('✓ گزارش کپی شد!');
+                showAlert('✓ گزارش کپی شد!', 'success');
             });
         }
 
@@ -674,175 +847,63 @@
             link.click();
         }
 
-        // Server Functions
-        let serverUrl = '';
-
-        async function saveToServer() {
-            const data = collectFormData();
-            const jsonStr = JSON.stringify(data, null, 2);
-            
-            if (!serverUrl) {
-                // No server configured - just download JSON
-                const blob = new Blob([jsonStr], { type: 'application/json' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                const date = document.getElementById('reportDate').value.replace(/\//g, '-');
-                link.download = 'data-' + date + '.json';
-                link.click();
-                
-                showAlert('✓ فایل JSON دانلود شد\n📌 برای اشتراک با تیم:\n۱. در GitHub یا npoint.io آپلود کنید\n۲. آدرس را در تنظیمات وارد کنید');
-                return;
-            }
-
-            // Try to save to server (if CORS is enabled)
-            try {
-                const response = await fetch(serverUrl, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: jsonStr
-                });
-                
-                if (response.ok) {
-                    showAlert('✓ ذخیره در سرور موفق بود');
-                    return;
-                }
-            } catch (error) {
-                console.log('Server save failed, downloading instead');
-            }
-            
-            // Fallback: Download file
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            const date = document.getElementById('reportDate').value.replace(/\//g, '-');
-            link.download = 'data-' + date + '.json';
-            link.click();
-            
-            showAlert('📥 فایل دانلود شد - آن را در سرور آپلود کنید');
-        }
-
-        async function loadFromServer() {
-            if (!serverUrl) {
-                showAlert('⚠️ لطفاً ابتدا آدرس سرور را در تنظیمات وارد کنید');
-                return;
-            }
-
-            try {
-                const response = await fetch(serverUrl);
-                if (!response.ok) throw new Error('Failed to load');
-                
-                const data = await response.json();
-                
-                if (data.report) {
-                    const r = data.report;
-                    document.getElementById('ringsProduced').value = r.ringsProduced || '0';
-                    document.getElementById('basketsProduced').value = r.basketsProduced || '';
-                    document.getElementById('monthlyProduction').value = r.monthlyProduction || '0';
-                    document.getElementById('yearlyProduction').value = r.yearlyProduction || '0';
-                    document.getElementById('totalProduction').value = r.totalProduction || '0';
-                    
-                    if (r.stock) {
-                        document.getElementById('rebar8Stock').value = r.stock.rebar8 || '0';
-                        document.getElementById('rebar12Stock').value = r.stock.rebar12 || '0';
-                        document.getElementById('rebar20Stock').value = r.stock.rebar20 || '0';
-                        document.getElementById('superplasticizerStock').value = r.stock.superplasticizer || '0';
-                        document.getElementById('microsilicaStock').value = r.stock.microsilica || '0';
-                    }
-                    
-                    document.getElementById('issues').value = r.issues || '';
-                    document.getElementById('suggestions').value = r.suggestions || '';
-                }
-                
-                if (data.materialRates) {
-                    materialRates = data.materialRates;
-                    updateMaterialRatesDisplay();
-                }
-                
-                updatePreview();
-                showAlert('✓ داده‌ها از سرور بارگذاری شد');
-            } catch (error) {
-                console.error('Load error:', error);
-                showAlert('⚠️ خطا در بارگذاری از سرور');
-            }
-        }
-
-        function saveServerUrl() {
-            const url = document.getElementById('serverUrl').value.trim();
-            if (url) {
-                serverUrl = url;
-                localStorage.setItem('serverUrl', url);
-                showAlert('✓ آدرس سرور ذخیره شد');
-            }
-        }
-
-        function loadServerUrl() {
-            const saved = localStorage.getItem('serverUrl');
-            if (saved) {
-                serverUrl = saved;
-                document.getElementById('serverUrl').value = saved;
-            }
-        }
-
-        function collectFormData() {
-            return {
-                lastUpdate: new Date().toISOString(),
-                report: {
-                    date: document.getElementById('reportDate').value,
-                    dayName: document.getElementById('dayName').value,
-                    ringsProduced: document.getElementById('ringsProduced').value,
-                    basketsProduced: document.getElementById('basketsProduced').value,
-                    monthlyProduction: document.getElementById('monthlyProduction').value,
-                    yearlyProduction: document.getElementById('yearlyProduction').value,
-                    totalProduction: document.getElementById('totalProduction').value,
-                    stock: {
-                        rebar8: document.getElementById('rebar8Stock').value,
-                        rebar12: document.getElementById('rebar12Stock').value,
-                        rebar20: document.getElementById('rebar20Stock').value,
-                        superplasticizer: document.getElementById('superplasticizerStock').value,
-                        microsilica: document.getElementById('microsilicaStock').value
-                    },
-                    issues: document.getElementById('issues').value,
-                    suggestions: document.getElementById('suggestions').value
-                },
-                materialRates: materialRates,
-                calculations: calculateStockDetails()
-            };
-        }
-
         function saveToLocalStorage() {
-            const data = collectFormData();
-            localStorage.setItem('segmentReportData', JSON.stringify(data));
+            const data = {
+                lastUpdate: new Date().toISOString(),
+                date: document.getElementById('reportDate').value,
+                dayName: document.getElementById('dayName').value,
+                ringsProduced: document.getElementById('ringsProduced').value,
+                basketsProduced: document.getElementById('basketsProduced').value,
+                monthlyProduction: document.getElementById('monthlyProduction').value,
+                yearlyProduction: document.getElementById('yearlyProduction').value,
+                totalProduction: document.getElementById('totalProduction').value,
+                stock: {
+                    rebar8: document.getElementById('rebar8Stock').value,
+                    rebar12: document.getElementById('rebar12Stock').value,
+                    rebar20: document.getElementById('rebar20Stock').value,
+                    superplasticizer: document.getElementById('superplasticizerStock').value,
+                    microsilica: document.getElementById('microsilicaStock').value
+                },
+                issues: document.getElementById('issues').value,
+                suggestions: document.getElementById('suggestions').value
+            };
+            localStorage.setItem('currentReport', JSON.stringify(data));
         }
 
         function loadFromLocalStorage() {
-            const saved = localStorage.getItem('segmentReportData');
+            const saved = localStorage.getItem('currentReport');
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
-                    if (data.report) {
-                        const r = data.report;
-                        document.getElementById('ringsProduced').value = r.ringsProduced || '0';
-                        document.getElementById('basketsProduced').value = r.basketsProduced || '';
-                        document.getElementById('monthlyProduction').value = r.monthlyProduction || '0';
-                        document.getElementById('yearlyProduction').value = r.yearlyProduction || '0';
-                        document.getElementById('totalProduction').value = r.totalProduction || '0';
-                        
-                        if (r.stock) {
-                            document.getElementById('rebar8Stock').value = r.stock.rebar8 || '0';
-                            document.getElementById('rebar12Stock').value = r.stock.rebar12 || '0';
-                            document.getElementById('rebar20Stock').value = r.stock.rebar20 || '0';
-                            document.getElementById('superplasticizerStock').value = r.stock.superplasticizer || '0';
-                            document.getElementById('microsilicaStock').value = r.stock.microsilica || '0';
+                    
+                    if (data.date) {
+                        const parts = data.date.split('/');
+                        if (parts.length === 3) {
+                            selectedJalaliDate = {
+                                year: parseInt(parts[0]),
+                                month: parseInt(parts[1]),
+                                day: parseInt(parts[2])
+                            };
+                            updateDateDisplay();
                         }
-                        
-                        document.getElementById('issues').value = r.issues || '';
-                        document.getElementById('suggestions').value = r.suggestions || '';
                     }
                     
-                    if (data.materialRates) {
-                        materialRates = data.materialRates;
-                        updateMaterialRatesDisplay();
+                    document.getElementById('ringsProduced').value = data.ringsProduced || '0';
+                    document.getElementById('basketsProduced').value = data.basketsProduced || '';
+                    document.getElementById('monthlyProduction').value = data.monthlyProduction || '0';
+                    document.getElementById('yearlyProduction').value = data.yearlyProduction || '0';
+                    document.getElementById('totalProduction').value = data.totalProduction || '0';
+                    
+                    if (data.stock) {
+                        document.getElementById('rebar8Stock').value = data.stock.rebar8 || '0';
+                        document.getElementById('rebar12Stock').value = data.stock.rebar12 || '0';
+                        document.getElementById('rebar20Stock').value = data.stock.rebar20 || '0';
+                        document.getElementById('superplasticizerStock').value = data.stock.superplasticizer || '0';
+                        document.getElementById('microsilicaStock').value = data.stock.microsilica || '0';
                     }
+                    
+                    document.getElementById('issues').value = data.issues || '';
+                    document.getElementById('suggestions').value = data.suggestions || '';
                     
                     updatePreview();
                 } catch (e) {
@@ -866,19 +927,39 @@
             materialRates.rebar20 = parseFloat(document.getElementById('setting_rebar20').value) || 250;
             materialRates.superplasticizer = parseFloat(document.getElementById('setting_superplasticizer').value) || 45;
             
+            config.maxHistory = parseInt(document.getElementById('setting_maxHistory').value) || 30;
+            config.autoBackup = document.getElementById('setting_autoBackup').value === 'true';
+            
             updateMaterialRatesDisplay();
             localStorage.setItem('materialRates', JSON.stringify(materialRates));
-            saveToLocalStorage();
+            localStorage.setItem('config', JSON.stringify(config));
+            
+            // Update backup badge
+            const badge = document.getElementById('backupBadge');
+            badge.textContent = config.autoBackup ? '💾 پشتیبان فعال' : '⚠️ پشتیبان غیرفعال';
+            badge.className = config.autoBackup ? 'badge success' : 'badge';
+            
             updatePreview();
             closeSettings();
-            showAlert('✓ تنظیمات ذخیره شد');
+            showAlert('✓ تنظیمات ذخیره شد', 'success');
         }
 
         function loadSettings() {
-            const saved = localStorage.getItem('materialRates');
-            if (saved) {
-                materialRates = JSON.parse(saved);
+            const savedRates = localStorage.getItem('materialRates');
+            if (savedRates) {
+                materialRates = JSON.parse(savedRates);
                 updateMaterialRatesDisplay();
+            }
+            
+            const savedConfig = localStorage.getItem('config');
+            if (savedConfig) {
+                config = JSON.parse(savedConfig);
+                document.getElementById('setting_maxHistory').value = config.maxHistory;
+                document.getElementById('setting_autoBackup').value = config.autoBackup.toString();
+                
+                const badge = document.getElementById('backupBadge');
+                badge.textContent = config.autoBackup ? '💾 پشتیبان فعال' : '⚠️ پشتیبان غیرفعال';
+                badge.className = config.autoBackup ? 'badge success' : 'badge';
             }
         }
 
@@ -895,9 +976,10 @@
         }
 
         // UI Functions
-        function showAlert(message) {
+        function showAlert(message, type = 'success') {
             const alert = document.getElementById('alert');
             alert.textContent = message;
+            alert.className = 'alert ' + type;
             alert.classList.add('show');
             setTimeout(() => alert.classList.remove('show'), 3000);
         }
@@ -910,8 +992,11 @@
                 calendar.classList.remove('show');
             }
             
-            const modal = document.getElementById('settingsModal');
-            if (e.target === modal) closeSettings();
+            const settingsModal = document.getElementById('settingsModal');
+            if (e.target === settingsModal) closeSettings();
+            
+            const historyModal = document.getElementById('historyModal');
+            if (e.target === historyModal) closeHistory();
         });
     </script>
 </body>
