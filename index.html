@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>گزارش کارخانه تولید سگمنت - نسخه حرفه‌ای</title>
+    <title>گزارش کارخانه تولید سگمنت - نسخه نهایی</title>
     <style>
         * {margin: 0; padding: 0; box-sizing: border-box;}
         body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #EBF4FF 0%, #E0E7FF 100%); min-height: 100vh; padding: 1rem;}
@@ -16,7 +16,6 @@
         .badge {background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;}
         .badge:hover {background: rgba(255,255,255,0.3);}
         .badge.success {background: rgba(16, 185, 129, 0.3);}
-        .icon {width: 2rem; height: 2rem; stroke: currentColor; stroke-width: 2; fill: none;}
         .form-container {background: white; border-radius: 0 0 1rem 1rem; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1);}
         .section {margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #E5E7EB;}
         .section:last-of-type {border-bottom: none;}
@@ -70,23 +69,48 @@
         .alert {position: fixed; top: 2rem; left: 50%; transform: translateX(-50%) translateY(-100px); background: #10B981; color: white; padding: 1rem 2rem; border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); opacity: 0; transition: all 0.3s; z-index: 1000; font-weight: bold;}
         .alert.show {transform: translateX(-50%) translateY(0); opacity: 1;}
         .alert.error {background: #EF4444;}
-        .calendar {position: absolute; top: 100%; left: 0; right: 0; margin-top: 0.5rem; background: white; border: 2px solid #6366F1; border-radius: 1rem; box-shadow: 0 20px 60px rgba(0,0,0,0.25); z-index: 100; padding: 1.25rem; min-width: 320px;}
-        .calendar-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 2px solid #E5E7EB;}
-        .calendar-header button {width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, #6366F1, #4F46E5); color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); font-weight: bold; display: flex; align-items: center; justify-content: center; transition: all 0.2s;}
-        .calendar-header button:hover {background: linear-gradient(135deg, #4F46E5, #4338CA); transform: scale(1.05); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);}
-        .calendar-title {font-weight: bold; color: #1F2937; font-size: 1.1rem; text-align: center;}
-        .calendar-weekdays {display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-bottom: 0.75rem;}
-        .calendar-weekday {text-align: center; font-size: 0.8rem; font-weight: bold; color: #6B7280; padding: 0.5rem; background: #F9FAFB; border-radius: 0.375rem;}
-        .calendar-days {display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;}
-        .calendar-day {aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 0.5rem; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; border: 2px solid transparent; background: #F9FAFB; font-weight: 500;}
-        .calendar-day:hover {background: #EEF2FF; border-color: #6366F1; transform: scale(1.05);}
-        .calendar-day.selected {background: linear-gradient(135deg, #6366F1, #4F46E5); color: white; font-weight: bold; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);}
-        .calendar-day.today {border: 2px solid #10B981; background: #D1FAE5; font-weight: bold; color: #065F46;}
-        .calendar-day.other-month {color: #D1D5DB; background: transparent;}
+        
+        /* Calendar Styles */
+        .date-input-wrapper {position: relative;}
+        .calendar-popup {position: absolute; top: 100%; left: 0; background: white; border: 2px solid #6366F1; border-radius: 0.75rem; padding: 1rem; margin-top: 0.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100; display: none; min-width: 320px;}
+        .calendar-popup.show {display: block;}
+        .calendar-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 2px solid #E5E7EB;}
+        .calendar-header button {padding: 0.5rem; background: linear-gradient(to left, #6366F1, #4F46E5); color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 1.2rem; min-width: 40px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
+        .calendar-header button:hover {transform: scale(1.05); box-shadow: 0 4px 8px rgba(0,0,0,0.15);}
+        .calendar-month {font-weight: bold; color: #1F2937; font-size: 1rem;}
+        .calendar-grid {display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem;}
+        .calendar-day {padding: 0.75rem; text-align: center; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; background: #F9FAFB; border: 1px solid #E5E7EB;}
+        .calendar-day:hover {background: #EEF2FF; transform: scale(1.05);}
+        .calendar-day.today {background: linear-gradient(135deg, #10B981, #059669); color: white; font-weight: bold;}
+        .calendar-day.selected {background: linear-gradient(135deg, #6366F1, #4F46E5); color: white; font-weight: bold;}
+        .calendar-day.disabled {color: #D1D5DB; cursor: not-allowed; background: #F3F4F6;}
+        .calendar-day.disabled:hover {transform: none; background: #F3F4F6;}
     </style>
 </head>
 <body>
     <div class="alert" id="alert">عملیات موفق ✓</div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ تنظیمات</h2>
+                <button class="modal-close" onclick="closeSettingsModal()">بستن</button>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label>آدرس سرور JSON</label>
+                <input type="text" id="serverUrl" placeholder="https://api.npoint.io/YOUR_KEY">
+                <p style="font-size: 0.75rem; color: #6B7280; margin-top: 0.5rem;">
+                    آدرس npoint.io یا GitHub JSON خود را وارد کنید
+                </p>
+            </div>
+
+            <button class="btn-save" onclick="saveSettings()" style="width: 100%;">
+                ✓ ذخیره تنظیمات
+            </button>
+        </div>
+    </div>
 
     <!-- Materials Modal -->
     <div class="modal" id="materialsModal">
@@ -110,10 +134,6 @@
                     <div class="form-group">
                         <label>واحد</label>
                         <input type="text" id="newMaterialUnit" placeholder="کیلوگرم / لیتر / تن">
-                    </div>
-                    <div class="form-group">
-                        <label>موجودی مبنا</label>
-                        <input type="number" id="newMaterialInitial" placeholder="0">
                     </div>
                     <div class="form-group">
                         <label>مصرف در رینگ</label>
@@ -148,10 +168,6 @@
                     <input type="text" id="editMaterialUnit">
                 </div>
                 <div class="form-group">
-                    <label>موجودی مبنا</label>
-                    <input type="number" id="editMaterialInitial">
-                </div>
-                <div class="form-group">
                     <label>مصرف در رینگ</label>
                     <input type="number" id="editMaterialConsumption">
                 </div>
@@ -168,10 +184,13 @@
                 <div class="header-title">
                     <div>
                         <h1>گزارش کارخانه تولید سگمنت</h1>
-                        <p>🔴 پروژه خط ۱۰ مترو تهران - نسخه حرفه‌ای</p>
+                        <p>🔴 پروژه خط ۱۰ مترو تهران - نسخه نهایی</p>
                     </div>
                 </div>
-                <div class="badge success">💾 پشتیبان فعال</div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <div class="badge success" onclick="openSettingsModal()">⚙️ تنظیمات</div>
+                    <div class="badge success">💾 همگام‌سازی فعال</div>
+                </div>
             </div>
         </div>
 
@@ -188,10 +207,17 @@
                 </h2>
                 <div class="grid">
                     <div class="form-group">
-                        <label>تاریخ (کلیک کنید)</label>
-                        <div style="position: relative;">
-                            <input type="text" id="reportDate" value="1404/08/18" readonly style="cursor: pointer; background: white;">
-                            <div id="calendar" class="calendar" style="display: none;"></div>
+                        <label>تاریخ</label>
+                        <div class="date-input-wrapper">
+                            <input type="text" id="reportDate" value="1404/08/18" readonly style="cursor: pointer;">
+                            <div class="calendar-popup" id="calendar">
+                                <div class="calendar-header">
+                                    <button onclick="changeMonth(-1)">◀</button>
+                                    <span class="calendar-month" id="calendarMonth"></span>
+                                    <button onclick="changeMonth(1)">▶</button>
+                                </div>
+                                <div class="calendar-grid" id="calendarGrid"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -264,7 +290,9 @@
 
             <!-- دکمه‌ها -->
             <div class="button-group">
-                <button class="btn-save" onclick="saveData()">💾 ذخیره</button>
+                <button class="btn-save" onclick="saveData()">💾 ذخیره محلی</button>
+                <button class="btn-primary" onclick="syncToServer()">☁️ ذخیره در سرور</button>
+                <button class="btn-primary" onclick="syncFromServer()">🔄 به‌روزرسانی از سرور</button>
                 <button class="btn-primary" onclick="exportJSON()">📥 صادرات JSON</button>
                 <button class="btn-primary" onclick="copyReport()">📋 کپی گزارش</button>
             </div>
@@ -273,43 +301,38 @@
 
     <script>
         let materials = {
-            rebar8: {name: 'میلگرد ۸', unit: 'کیلوگرم', initialStock: 0, ringConsumption: 736},
-            rebar12: {name: 'میلگرد ۱۲', unit: 'کیلوگرم', initialStock: 0, ringConsumption: 758},
-            rebar20: {name: 'میلگرد ۲۰', unit: 'کیلوگرم', initialStock: 0, ringConsumption: 250},
-            superplasticizer: {name: 'فوق روان‌کننده', unit: 'کیلوگرم', initialStock: 0, ringConsumption: 45}
+            rebar8: {name: 'میلگرد ۸', unit: 'کیلوگرم', ringConsumption: 736},
+            rebar12: {name: 'میلگرد ۱۲', unit: 'کیلوگرم', ringConsumption: 758},
+            rebar20: {name: 'میلگرد ۲۰', unit: 'کیلوگرم', ringConsumption: 250},
+            superplasticizer: {name: 'فوق روان‌کننده', unit: 'کیلوگرم', ringConsumption: 45}
         };
 
         let materialStocks = {};
+        let currentCalendarYear = 1404;
+        let currentCalendarMonth = 8;
+        let selectedJalaaliDate = null;
 
         const persianMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
         const persianDays = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];
-        let currentJalaliDate, selectedJalaliDate, calendarDisplayMonth, calendarDisplayYear;
 
         function toPersianNumber(num) {
             const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
             return String(num).replace(/\d/g, x => persianDigits[x]);
         }
 
-        function toJalali(gy, gm, gd) {
-            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-            let jy = (gy <= 1600) ? 0 : 979;
-            gy -= (gy <= 1600) ? 621 : 1600;
-            let gy2 = (gm > 2) ? (gy + 1) : gy;
-            let days = (365 * gy) + (Math.floor((gy2 + 3) / 4)) - (Math.floor((gy2 + 99) / 100)) + (Math.floor((gy2 + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
-            jy += 33 * Math.floor(days / 12053);
-            days %= 12053;
-            jy += 4 * Math.floor(days / 1461);
-            days %= 1461;
-            if (days > 365) {
-                jy += Math.floor((days - 1) / 365);
-                days = (days - 1) % 365;
+        function toEnglishNumber(str) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+            let result = str;
+            for (let i = 0; i < 10; i++) {
+                result = result.replace(new RegExp(persianDigits[i], 'g'), i);
+                result = result.replace(new RegExp(arabicDigits[i], 'g'), i);
             }
-            let jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
-            let jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
-            return {year: jy, month: jm, day: jd};
+            return result;
         }
 
-        function toGregorian(jy, jm, jd) {
+        function jalaaliToGregorian(jy, jm, jd) {
+            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
             let gy = (jy <= 979) ? 621 : 1600;
             jy -= (jy <= 979) ? 0 : 979;
             let days = (365 * jy) + (Math.floor(jy / 33) * 8) + Math.floor(((jy % 33) + 3) / 4) + 78 + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
@@ -332,118 +355,144 @@
                 days %= 365;
             }
             let gd = days + 1;
-            let sal_a = [0, 31, ((leap && gy >= 1600) || (!leap && gy < 1600)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            let gm = 0;
+            let sal_a = [0, 31, ((leap && (gy % 4 === 0) && ((gy % 100 !== 0) || (gy % 400 === 0))) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            let gm;
             for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) gd -= sal_a[gm];
-            return {gy: gy, gm: gm, gd: gd};
+            return [gy, gm, gd];
         }
 
-        function initCalendar() {
-            const now = new Date();
-            currentJalaliDate = toJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
-            selectedJalaliDate = {...currentJalaliDate};
-            calendarDisplayMonth = currentJalaliDate.month;
-            calendarDisplayYear = currentJalaliDate.year;
-            updateDateDisplay();
-            
-            document.getElementById('reportDate').addEventListener('click', toggleCalendar);
-        }
-
-        function toggleCalendar() {
-            const calendar = document.getElementById('calendar');
-            if (calendar.style.display === 'none') {
-                calendar.style.display = 'block';
-                renderCalendar();
-            } else {
-                calendar.style.display = 'none';
+        function gregorianToJalaali(gy, gm, gd) {
+            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            let jy = (gy <= 1600) ? 0 : 979;
+            gy -= (gy <= 1600) ? 621 : 1600;
+            let days = (365 * gy) + (Math.floor((gy + 3) / 4)) - (Math.floor((gy + 99) / 100)) + (Math.floor((gy + 399) / 400)) - 80 + gd + g_d_m[gm - 1];
+            if (gm > 2 && ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0))) days++;
+            jy += 33 * Math.floor(days / 12053);
+            days %= 12053;
+            jy += 4 * Math.floor(days / 1461);
+            days %= 1461;
+            if (days > 365) {
+                jy += Math.floor((days - 1) / 365);
+                days = (days - 1) % 365;
             }
+            let jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+            let jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+            return [jy, jm, jd];
+        }
+
+        function isLeapJalaaliYear(year) {
+            return [1, 5, 9, 13, 17, 22, 26, 30].indexOf(year % 33) !== -1;
+        }
+
+        function getDaysInJalaaliMonth(year, month) {
+            if (month <= 6) return 31;
+            if (month <= 11) return 30;
+            return isLeapJalaaliYear(year) ? 30 : 29;
         }
 
         function renderCalendar() {
-            const calendar = document.getElementById('calendar');
-            let html = '<div class="calendar-header">';
-            html += '<button onclick="previousMonth(event)" title="ماه قبل">◀</button>';
-            html += '<div class="calendar-title">' + persianMonths[calendarDisplayMonth - 1] + ' ' + toPersianNumber(calendarDisplayYear) + '</div>';
-            html += '<button onclick="nextMonth(event)" title="ماه بعد">▶</button></div>';
+            const grid = document.getElementById('calendarGrid');
+            const monthEl = document.getElementById('calendarMonth');
             
-            html += '<div class="calendar-weekdays">';
-            ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'].forEach(day => {
-                html += '<div class="calendar-weekday">' + day + '</div>';
-            });
-            html += '</div><div class="calendar-days">';
+            monthEl.textContent = persianMonths[currentCalendarMonth - 1] + ' ' + toPersianNumber(currentCalendarYear);
             
-            const firstDayOfMonth = toGregorian(calendarDisplayYear, calendarDisplayMonth, 1);
-            const firstDate = new Date(firstDayOfMonth.gy, firstDayOfMonth.gm - 1, firstDayOfMonth.gd);
-            const firstDayOfWeek = (firstDate.getDay() + 1) % 7;
-            const daysInMonth = calendarDisplayMonth <= 6 ? 31 : (calendarDisplayMonth <= 11 ? 30 : 29);
+            const daysInMonth = getDaysInJalaaliMonth(currentCalendarYear, currentCalendarMonth);
+            const firstDayGregorian = jalaaliToGregorian(currentCalendarYear, currentCalendarMonth, 1);
+            const firstDay = new Date(firstDayGregorian[0], firstDayGregorian[1] - 1, firstDayGregorian[2]);
+            const firstDayOfWeek = (firstDay.getDay() + 1) % 7;
+            
+            let html = '';
             
             for (let i = 0; i < firstDayOfWeek; i++) {
-                html += '<div class="calendar-day other-month"></div>';
+                html += '<div class="calendar-day disabled"></div>';
             }
+            
+            const today = new Date();
+            const todayJalaali = gregorianToJalaali(today.getFullYear(), today.getMonth() + 1, today.getDate());
             
             for (let day = 1; day <= daysInMonth; day++) {
-                const isSelected = day === selectedJalaliDate.day && 
-                                 calendarDisplayMonth === selectedJalaliDate.month && 
-                                 calendarDisplayYear === selectedJalaliDate.year;
-                const isToday = day === currentJalaliDate.day && 
-                               calendarDisplayMonth === currentJalaliDate.month && 
-                               calendarDisplayYear === currentJalaliDate.year;
-                
                 let classes = 'calendar-day';
-                if (isSelected) classes += ' selected';
-                if (isToday) classes += ' today';
                 
-                html += '<div class="' + classes + '" onclick="selectDate(' + day + ')">' + 
-                        toPersianNumber(day) + '</div>';
+                if (todayJalaali[0] === currentCalendarYear && todayJalaali[1] === currentCalendarMonth && todayJalaali[2] === day) {
+                    classes += ' today';
+                }
+                
+                if (selectedJalaaliDate && 
+                    selectedJalaaliDate.year === currentCalendarYear && 
+                    selectedJalaaliDate.month === currentCalendarMonth && 
+                    selectedJalaaliDate.day === day) {
+                    classes += ' selected';
+                }
+                
+                html += `<div class="${classes}" onclick="selectDate(${day})">${toPersianNumber(day)}</div>`;
             }
             
-            html += '</div>';
-            calendar.innerHTML = html;
+            grid.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            currentCalendarMonth += delta;
+            if (currentCalendarMonth > 12) {
+                currentCalendarMonth = 1;
+                currentCalendarYear++;
+            } else if (currentCalendarMonth < 1) {
+                currentCalendarMonth = 12;
+                currentCalendarYear--;
+            }
+            renderCalendar();
         }
 
         function selectDate(day) {
-            selectedJalaliDate = {year: calendarDisplayYear, month: calendarDisplayMonth, day: day};
-            updateDateDisplay();
-            toggleCalendar();
-        }
-
-        function previousMonth(event) {
-            event.stopPropagation();
-            calendarDisplayMonth--;
-            if (calendarDisplayMonth < 1) {
-                calendarDisplayMonth = 12;
-                calendarDisplayYear--;
-            }
-            renderCalendar();
-        }
-
-        function nextMonth(event) {
-            event.stopPropagation();
-            calendarDisplayMonth++;
-            if (calendarDisplayMonth > 12) {
-                calendarDisplayMonth = 1;
-                calendarDisplayYear++;
-            }
-            renderCalendar();
-        }
-
-        function updateDateDisplay() {
-            const jalali = selectedJalaliDate;
-            const gregorian = toGregorian(jalali.year, jalali.month, jalali.day);
-            const date = new Date(gregorian.gy, gregorian.gm - 1, gregorian.gd);
-            const dayOfWeek = date.getDay();
+            selectedJalaaliDate = {
+                year: currentCalendarYear,
+                month: currentCalendarMonth,
+                day: day
+            };
             
-            document.getElementById('reportDate').value = 
-                toPersianNumber(jalali.year) + '/' + 
-                toPersianNumber(String(jalali.month).padStart(2, '0')) + '/' + 
-                toPersianNumber(String(jalali.day).padStart(2, '0'));
+            const dateStr = toPersianNumber(currentCalendarYear) + '/' + 
+                          toPersianNumber(String(currentCalendarMonth).padStart(2, '0')) + '/' + 
+                          toPersianNumber(String(day).padStart(2, '0'));
             
+            document.getElementById('reportDate').value = dateStr;
+            
+            const gregorian = jalaaliToGregorian(currentCalendarYear, currentCalendarMonth, day);
+            const gregorianDate = new Date(gregorian[0], gregorian[1] - 1, gregorian[2]);
+            const dayOfWeek = gregorianDate.getDay();
             document.getElementById('dayName').value = persianDays[dayOfWeek];
+            
+            document.getElementById('calendar').classList.remove('show');
+            renderCalendar();
         }
+
+        document.getElementById('reportDate').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const calendar = document.getElementById('calendar');
+            calendar.classList.toggle('show');
+            if (calendar.classList.contains('show')) {
+                renderCalendar();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            const calendar = document.getElementById('calendar');
+            const dateInput = document.getElementById('reportDate');
+            if (!calendar.contains(e.target) && e.target !== dateInput) {
+                calendar.classList.remove('show');
+            }
+        });
+
+        document.getElementById('calendar').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
 
         function init() {
-            initCalendar();
             loadData();
+            const today = new Date();
+            const jalaali = gregorianToJalaali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+            currentCalendarYear = jalaali[0];
+            currentCalendarMonth = jalaali[1];
+            selectedJalaaliDate = {year: jalaali[0], month: jalaali[1], day: jalaali[2]};
+            
             renderMaterialInputs();
             renderMaterialRates();
             calculateCapacity();
@@ -478,7 +527,6 @@
             });
             container.innerHTML = html;
             
-            // Add event listeners
             Object.keys(materials).forEach(key => {
                 const input = document.getElementById('stock_' + key);
                 if (input) {
@@ -514,6 +562,27 @@
             display.innerHTML = html;
         }
 
+        function openSettingsModal() {
+            const savedUrl = localStorage.getItem('serverUrl') || 'https://api.npoint.io/d6c1e9764fbc76fd651a';
+            document.getElementById('serverUrl').value = savedUrl;
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('show');
+        }
+
+        function saveSettings() {
+            const url = document.getElementById('serverUrl').value.trim();
+            if (!url) {
+                showAlert('لطفاً آدرس سرور را وارد کنید', 'error');
+                return;
+            }
+            localStorage.setItem('serverUrl', url);
+            showAlert('تنظیمات ذخیره شد', 'success');
+            closeSettingsModal();
+        }
+
         function openMaterialsModal() {
             renderMaterialsList();
             document.getElementById('materialsModal').classList.add('show');
@@ -532,14 +601,12 @@
             document.getElementById('addMaterialForm').style.display = 'none';
             document.getElementById('newMaterialName').value = '';
             document.getElementById('newMaterialUnit').value = '';
-            document.getElementById('newMaterialInitial').value = '';
             document.getElementById('newMaterialConsumption').value = '';
         }
 
         function addMaterial() {
             const name = document.getElementById('newMaterialName').value.trim();
             const unit = document.getElementById('newMaterialUnit').value.trim();
-            const initial = parseFloat(document.getElementById('newMaterialInitial').value) || 0;
             const consumption = parseFloat(document.getElementById('newMaterialConsumption').value) || 0;
             
             if (!name || !unit) {
@@ -551,11 +618,10 @@
             materials[key] = {
                 name: name,
                 unit: unit,
-                initialStock: initial,
                 ringConsumption: consumption
             };
             
-            materialStocks[key] = initial;
+            materialStocks[key] = 0;
             
             hideAddMaterialForm();
             renderMaterialsList();
@@ -575,7 +641,6 @@
                 html += '<div class="material-name">' + mat.name + '</div>';
                 html += '<div class="material-details">';
                 html += 'واحد: ' + mat.unit + ' | ';
-                html += 'موجودی مبنا: ' + toPersianNumber(mat.initialStock) + ' | ';
                 html += 'مصرف: ' + toPersianNumber(mat.ringConsumption) + ' در رینگ';
                 html += '</div>';
                 html += '</div>';
@@ -594,7 +659,6 @@
             document.getElementById('editMaterialKey').value = key;
             document.getElementById('editMaterialName').value = mat.name;
             document.getElementById('editMaterialUnit').value = mat.unit;
-            document.getElementById('editMaterialInitial').value = mat.initialStock;
             document.getElementById('editMaterialConsumption').value = mat.ringConsumption;
             document.getElementById('editMaterialModal').classList.add('show');
         }
@@ -607,7 +671,6 @@
             const key = document.getElementById('editMaterialKey').value;
             const name = document.getElementById('editMaterialName').value.trim();
             const unit = document.getElementById('editMaterialUnit').value.trim();
-            const initial = parseFloat(document.getElementById('editMaterialInitial').value) || 0;
             const consumption = parseFloat(document.getElementById('editMaterialConsumption').value) || 0;
             
             if (!name || !unit) {
@@ -618,7 +681,6 @@
             materials[key] = {
                 name: name,
                 unit: unit,
-                initialStock: initial,
                 ringConsumption: consumption
             };
             
@@ -698,10 +760,103 @@
             }
         }
 
+        async function syncToServer() {
+            const serverUrl = localStorage.getItem('serverUrl') || 'https://api.npoint.io/d6c1e9764fbc76fd651a';
+            
+            const data = {
+                version: '3.0',
+                lastUpdate: new Date().toISOString(),
+                date: document.getElementById('reportDate').value,
+                dayName: document.getElementById('dayName').value,
+                production: {
+                    rings: document.getElementById('ringsProduced').value,
+                    baskets: document.getElementById('basketsProduced').value,
+                    monthly: document.getElementById('monthlyProduction').value,
+                    yearly: document.getElementById('yearlyProduction').value,
+                    total: document.getElementById('totalProduction').value
+                },
+                materials: materials,
+                stocks: materialStocks,
+                issues: document.getElementById('issues').value,
+                suggestions: document.getElementById('suggestions').value,
+                config: {
+                    autoBackup: true,
+                    maxHistory: 30
+                }
+            };
+            
+            try {
+                const response = await fetch(serverUrl, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    showAlert('✓ داده‌ها در سرور ذخیره شد', 'success');
+                    saveData();
+                } else {
+                    showAlert('خطا در ارسال به سرور', 'error');
+                }
+            } catch (error) {
+                showAlert('خطا در اتصال به سرور', 'error');
+                console.error('Sync error:', error);
+            }
+        }
+
+        async function syncFromServer() {
+            const serverUrl = localStorage.getItem('serverUrl') || 'https://api.npoint.io/d6c1e9764fbc76fd651a';
+            
+            try {
+                const response = await fetch(serverUrl);
+                if (!response.ok) throw new Error('Server error');
+                
+                const data = await response.json();
+                
+                if (data.date) document.getElementById('reportDate').value = data.date;
+                if (data.dayName) document.getElementById('dayName').value = data.dayName;
+                
+                if (data.production) {
+                    document.getElementById('ringsProduced').value = data.production.rings || 0;
+                    document.getElementById('basketsProduced').value = data.production.baskets || 0;
+                    document.getElementById('monthlyProduction').value = data.production.monthly || 0;
+                    document.getElementById('yearlyProduction').value = data.production.yearly || 0;
+                    document.getElementById('totalProduction').value = data.production.total || 0;
+                }
+                
+                if (data.materials) {
+                    materials = data.materials;
+                    renderMaterialInputs();
+                    renderMaterialRates();
+                }
+                
+                if (data.stocks) {
+                    materialStocks = data.stocks;
+                    Object.entries(materialStocks).forEach(([key, value]) => {
+                        const input = document.getElementById('stock_' + key);
+                        if (input) input.value = value;
+                    });
+                }
+                
+                if (data.issues) document.getElementById('issues').value = data.issues;
+                if (data.suggestions) document.getElementById('suggestions').value = data.suggestions;
+                
+                calculateCapacity();
+                saveData();
+                
+                showAlert('✓ داده‌ها از سرور به‌روزرسانی شد', 'success');
+            } catch (error) {
+                showAlert('خطا در دریافت از سرور', 'error');
+                console.error('Sync error:', error);
+            }
+        }
+
         function exportJSON() {
             const data = {
+                version: '3.0',
                 exportDate: new Date().toISOString(),
                 date: document.getElementById('reportDate').value,
+                dayName: document.getElementById('dayName').value,
                 production: {
                     rings: document.getElementById('ringsProduced').value,
                     baskets: document.getElementById('basketsProduced').value,
@@ -728,6 +883,8 @@
             const date = document.getElementById('reportDate').value;
             const day = document.getElementById('dayName').value;
             const rings = document.getElementById('ringsProduced').value || '۰';
+            const issues = document.getElementById('issues').value || 'بدون مشکل';
+            const suggestions = document.getElementById('suggestions').value || 'بدون پیشنهاد';
             
             let report = '🔴 گزارش کارخانه تولید سگمنت\n';
             report += 'پروژه خط ۱۰ مترو تهران\n';
@@ -749,8 +906,11 @@
                 report += '   • ظرفیت: ' + toPersianNumber(capacity) + ' رینگ\n\n';
             });
             
+            report += '⚠️ مشکلات و موانع:\n' + issues + '\n\n';
+            report += '💡 پیشنهادات:\n' + suggestions + '\n';
+            
             navigator.clipboard.writeText(report).then(() => {
-                showAlert('✓ گزارش کپی شد', 'success');
+                showAlert('✓ گزارش کامل کپی شد', 'success');
             });
         }
 
@@ -763,19 +923,13 @@
         }
 
         document.addEventListener('click', function(e) {
-            const modals = ['materialsModal', 'editMaterialModal'];
+            const modals = ['settingsModal', 'materialsModal', 'editMaterialModal'];
             modals.forEach(modalId => {
                 const modal = document.getElementById(modalId);
                 if (e.target === modal) {
                     modal.classList.remove('show');
                 }
             });
-            
-            const calendar = document.getElementById('calendar');
-            const dateInput = document.getElementById('reportDate');
-            if (calendar && !calendar.contains(e.target) && e.target !== dateInput) {
-                calendar.style.display = 'none';
-            }
         });
 
         window.addEventListener('DOMContentLoaded', init);
